@@ -81,7 +81,7 @@ bool Library::UpdateBook(const string& article, const Book& newBookData)
 {
     Book* bookToUpdate = this->FindBookByArticle(article);
     if (bookToUpdate != nullptr)
-        * {
+    {
         *bookToUpdate = newBookData; // Використовуємо оператор =
         return true;
     }

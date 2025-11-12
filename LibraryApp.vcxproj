@@ -132,6 +132,7 @@
     <ClCompile Include="Library.cpp" />
     <ClCompile Include="LibraryApp.cpp" />
     <ClCompile Include="StandardUser.cpp" />
+    <ClCompile Include="UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdminUser.h" />
@@ -142,6 +143,7 @@
     <ClInclude Include="IStorable.h" />
     <ClInclude Include="Library.h" />
     <ClInclude Include="StandardUser.h" />
+    <ClInclude Include="UIManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

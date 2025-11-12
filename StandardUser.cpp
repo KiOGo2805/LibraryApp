@@ -1,38 +1,41 @@
-#pragma once
-
 /*
- * Цей файл оголошує клас StandardUser.
- * Це конкретний клас-нащадок від BaseUser для звичайного користувача.
+ * Цей файл містить реалізацію методів класу StandardUser.
  */
 
-#include "BaseUser.h"
+#include "StandardUser.h" // Він має включати СВІЙ .h файл
 
- /**
-  * @class StandardUser
-  * @brief Клас для звичайного користувача (не адміна).
-  *
-  * Успадковує BaseUser та реалізує його функціонал
-  * для користувача зі стандартними правами.
-  */
-class StandardUser : public BaseUser
+using namespace std; // Можна додати для зручності
+
+StandardUser::StandardUser(const string& username, const string& password)
+    : username(username), password(password)
 {
-public:
-    /**
-     * @brief Конструктор.
-     * @param username Логін.
-     * @param password Пароль.
-     */
-    StandardUser(const std::string& username, const std::string& password);
+    // Тіло конструктора
+}
 
-    // --- Реалізація віртуальних методів ---
+string StandardUser::GetUsername() const
+{
+    return this->username;
+}
 
-    std::string GetUsername() const override;
-    bool CheckPassword(const std::string& password) const override;
-    std::string GetUserType() const override;
-    std::string ToFileString() const override;
-    bool IsAdmin() const override;
+bool StandardUser::CheckPassword(const string& password) const
+{
+    return this->password == password;
+}
 
-private:
-    std::string username;
-    std::string password; // У реальному проекті тут був би хеш
-};
+string StandardUser::GetUserType() const
+{
+    return "Standard";
+}
+
+bool StandardUser::IsAdmin() const
+{
+    // Звичайний користувач НЕ є адміном
+    return false;
+}
+
+string StandardUser::ToFileString() const
+{
+    // Формат: Type:Username:Password
+    // Наприклад: Standard:someuser:pass123
+    return this->GetUserType() + ":" + this->username + ":" + this->password;
+}

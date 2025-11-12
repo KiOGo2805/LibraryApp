@@ -6,6 +6,7 @@
  */
 
 #include "BaseUser.h"
+#include <string>
 
  /**
   * @class StandardUser

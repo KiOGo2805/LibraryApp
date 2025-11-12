@@ -9,7 +9,7 @@
 
 #include "Library.h"
 #include "AuthManager.h"
- // #include "UIManager.h" // Ми додамо це на наступному кроці
+#include "UIManager.h"
 
  /**
   * @class Application
@@ -48,5 +48,5 @@ private:
     AuthManager authManager;
 
     // "Панель приладів" (інтерфейс)
-    // UIManager uiManager; // Ми додамо це на фінальному кроці
+    UIManager uiManager;
 };

@@ -2,7 +2,7 @@
  * Цей файл містить реалізацію методів класу AdminUser.
  */
 
-#include "AdminUser.h"
+#include "AdminUser.h" // Він має включати СВІЙ .h файл
 
 using namespace std;
 
