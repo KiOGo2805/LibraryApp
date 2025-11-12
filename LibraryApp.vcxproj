@@ -123,11 +123,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="AuthManager.cpp" />
+    <ClCompile Include="Book.cpp" />
     <ClCompile Include="IStorable.cpp" />
+    <ClCompile Include="Library.cpp" />
     <ClCompile Include="LibraryApp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="AuthManager.h" />
+    <ClInclude Include="Book.h" />
     <ClInclude Include="IStorable.h" />
+    <ClInclude Include="Library.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
