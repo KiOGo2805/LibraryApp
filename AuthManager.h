@@ -4,17 +4,21 @@
  * Цей файл оголошує клас AuthManager.
  * AuthManager відповідає за автентифікацію, авторизацію
  * та управління обліковими записами користувачів.
+ *
+ * Ця версія використовує поліморфізм та ієрархію класів BaseUser.
  */
 
+#include "BaseUser.h" // Наш новий абстрактний клас
 #include <string>
-#include <map> // Ефективно для зберігання пар "логін:пароль"
+#include <map>
+#include <memory> // Для std::unique_ptr
 
  /**
   * @class AuthManager
   * @brief Керує всіма аспектами облікових записів користувачів.
   *
-  * Завантажує користувачів з файлу, перевіряє логін/пароль,
-  * керує сесією поточного користувача та надає адмін-функції.
+  * Використовує std::map для зберігання об'єктів-нащадків BaseUser
+  * за допомогою розумних вказівників std::unique_ptr.
   */
 class AuthManager
 {
@@ -27,9 +31,14 @@ public:
 
     /**
      * @brief Деструктор.
-     * Може викликати SaveUsers(), хоча краще зберігати зміни одразу.
+     * Необхідний для коректного видалення std::unique_ptr.
      */
     ~AuthManager();
+
+    // Забороняємо копіювання, оскільки керуємо унікальними ресурсами
+    AuthManager(const AuthManager&) = delete;
+    AuthManager& operator=(const AuthManager&) = delete;
+
 
     /**
      * @brief Спроба входу в систему.
@@ -68,9 +77,14 @@ public:
      * @brief Створює нового користувача (тільки для адміна).
      * @param username Новий логін.
      * @param password Новий пароль.
+     * @param isAdmin Чи повинен новий користувач бути адміном.
      * @return true, якщо успішно, false - якщо користувач існує або немає прав.
      */
-    bool CreateUser(const std::string& username, const std::string& password);
+    bool CreateUser(
+        const std::string& username,
+        const std::string& password,
+        bool isAdmin
+    );
 
     /**
      * @brief Видаляє користувача (тільки для адміна).
@@ -87,20 +101,23 @@ public:
 private:
     /**
      * @brief Завантажує базу користувачів з файлу.
-     * Викликається конструктором.
      */
     void LoadUsers();
 
     /**
      * @brief Зберігає поточну базу користувачів у файл.
-     * Викликається після CreateUser або DeleteUser.
      */
     void SaveUsers() const;
 
     // Приватні поля (camelCase)
     std::string usersFilePath;
-    std::map<std::string, std::string> users; // Ключ - логін, Значення - пароль
 
-    std::string currentUser;
-    bool isAdmin;
+    // Ми зберігаємо вказівники на базовий клас, але вони вказують
+    // на реальні об'єкти (AdminUser або StandardUser).
+    // Ключ - це логін (для швидкого пошуку O(log N)).
+    std::map<std::string, std::unique_ptr<BaseUser>> users;
+
+    // Вказівник на поточного залогованого користувача.
+    // Це "неволодіючий" вказівник. Об'єкт живе всередині 'users'.
+    BaseUser* currentUser;
 };

@@ -1,25 +1,30 @@
 /*
  * Цей файл містить реалізацію методів класу AuthManager.
+ * Ця версія використовує поліморфізм для роботи з BaseUser.
  */
 
 #include "AuthManager.h"
+#include "StandardUser.h" // Потрібна реалізація для StandardUser
+#include "AdminUser.h"    // Потрібна реалізація для AdminUser
 #include <iostream>
 #include <fstream>
-#include <sstream> // Для std::stringstream
+#include <sstream>
+#include <memory>         // Для std::make_unique
 
 using namespace std;
 
-// Вимога 1.6: "Має бути користувач «admin» із фіксованим паролем, 
-// заданим під час ініціалізації або вбудованим у файл."
-const string ADMIN_USERNAME = "admin";
-const string ADMIN_DEFAULT_PASS = "admin123";
+// Константи для адміна
+namespace
+{
+    const string ADMIN_USERNAME = "admin";
+    const string ADMIN_DEFAULT_PASS = "admin123";
+}
 
 // --- Конструктор та Деструктор ---
 
 AuthManager::AuthManager(const string& usersFilePath)
     : usersFilePath(usersFilePath),
-    currentUser(""),
-    isAdmin(false)
+    currentUser(nullptr) // На початку ніхто не залогований
 {
     try
     {
@@ -27,15 +32,16 @@ AuthManager::AuthManager(const string& usersFilePath)
     }
     catch (const exception& e)
     {
-        // Вимога 3.2
         cerr << "Error: Failed to load users file. " << e.what() << endl;
     }
 }
 
+// Оголошення деструктора в .cpp файлі є ОБОВ'ЯЗКОВИМ
+// для коректної роботи std::unique_ptr з неповними типами (PImpl)
 AuthManager::~AuthManager()
 {
-    // Немає потреби викликати SaveUsers(), оскільки ми
-    // зберігаємо зміни одразу в CreateUser/DeleteUser.
+    // Тіло може бути порожнім, але його наявність тут
+    // дозволяє компілятору коректно видалити unique_ptr
 }
 
 // --- Основні методи ---
@@ -45,46 +51,55 @@ bool AuthManager::Login(const string& username, const string& password)
     // Шукаємо користувача в 'map'
     auto it = this->users.find(username);
 
-    // Перевіряємо, чи користувач існує І чи пароль вірний
-    if (it != this->users.end() && it->second == password)
+    if (it != this->users.end())
     {
-        this->currentUser = username;
-        this->isAdmin = (username == ADMIN_USERNAME);
-        return true;
+        // Якщо знайдено, викликаємо поліморфний метод CheckPassword
+        if (it->second->CheckPassword(password))
+        {
+            // Успіх. Зберігаємо вказівник на об'єкт користувача
+            this->currentUser = it->second.get();
+            return true;
+        }
     }
 
-    // Якщо логін/пароль невірні
-    this->currentUser = "";
-    this->isAdmin = false;
+    // Якщо логін/пароль невірні або користувач не знайдений
+    this->currentUser = nullptr;
     return false;
 }
 
 void AuthManager::Logout()
 {
-    this->currentUser = "";
-    this->isAdmin = false;
+    this->currentUser = nullptr;
 }
 
 bool AuthManager::IsAdmin() const
 {
-    return this->isAdmin;
+    // Перевіряємо, чи ми залоговані І чи поточний користувач
+    // повертає true з поліморфного методу IsAdmin()
+    return this->IsLoggedIn() && this->currentUser->IsAdmin();
 }
 
 bool AuthManager::IsLoggedIn() const
 {
-    return !this->currentUser.empty();
+    return this->currentUser != nullptr;
 }
 
 string AuthManager::GetCurrentUser() const
 {
-    return this->currentUser;
+    if (this->IsLoggedIn())
+    {
+        return this->currentUser->GetUsername();
+    }
+    return "";
 }
 
 // --- Адмін-функції ---
 
-bool AuthManager::CreateUser(const string& username, const string& password)
+bool AuthManager::CreateUser(
+    const string& username,
+    const string& password,
+    bool isAdmin)
 {
-    // Вимога 4.6: "Адміністратор має доступ до..."
     if (!this->IsAdmin())
     {
         cerr << "Error: Only admin can create users." << endl;
@@ -97,28 +112,36 @@ bool AuthManager::CreateUser(const string& username, const string& password)
         return false;
     }
 
-    // Перевіряємо, чи користувач вже існує
     if (this->users.find(username) != this->users.end())
     {
         cerr << "Error: User '" << username << "' already exists." << endl;
         return false;
     }
 
-    // Додаємо нового користувача
-    this->users[username] = password;
+    // Створюємо нового користувача потрібного типу
+    unique_ptr<BaseUser> newUser;
+    if (isAdmin)
+    {
+        newUser = make_unique<AdminUser>(username, password);
+    }
+    else
+    {
+        newUser = make_unique<StandardUser>(username, password);
+    }
+
+    // Додаємо нового користувача в map
+    this->users[username] = move(newUser);
 
     try
     {
-        this->SaveUsers(); // Одразу зберігаємо зміни
+        this->SaveUsers(); // Зберігаємо зміни у файл
         cout << "User '" << username << "' created successfully." << endl;
         return true;
     }
     catch (const exception& e)
     {
-        cerr << "Error: Failed to save users file after creation. "
-            << e.what() << endl;
-        // Повертаємо зміни назад, якщо не вдалося зберегти
-        this->users.erase(username);
+        cerr << "Error: Failed to save users file. " << e.what() << endl;
+        this->users.erase(username); // Повертаємо зміни
         return false;
     }
 }
@@ -131,10 +154,9 @@ bool AuthManager::DeleteUser(const string& username)
         return false;
     }
 
-    // Вимога 1.6: "видаляти користувачів (крім себе)"
     if (username == ADMIN_USERNAME)
     {
-        cerr << "Error: Cannot delete the admin account." << endl;
+        cerr << "Error: Cannot delete the primary admin account." << endl;
         return false;
     }
 
@@ -145,20 +167,18 @@ bool AuthManager::DeleteUser(const string& username)
         return false;
     }
 
-    // Видаляємо користувача
-    this->users.erase(it);
+    this->users.erase(it); // Видаляємо з map
 
     try
     {
-        this->SaveUsers(); // Одразу зберігаємо зміни
+        this->SaveUsers(); // Зберігаємо зміни
         cout << "User '" << username << "' deleted successfully." << endl;
         return true;
     }
     catch (const exception& e)
     {
-        cerr << "Error: Failed to save users file after deletion. "
-            << e.what() << endl;
-        // (Тут складно відновити дані, але для курсової це ок)
+        cerr << "Error: Failed to save users file after deletion." << e.what() << endl;
+        // (Відновити видалене складно, але для курсової це ок)
         return false;
     }
 }
@@ -174,29 +194,28 @@ void AuthManager::ListUsers() const
     cout << "--- User List ---" << endl;
     for (const auto& pair : this->users)
     {
-        cout << "- " << pair.first;
-        if (pair.first == ADMIN_USERNAME)
-        {
-            cout << " [Admin]";
-        }
-        cout << endl;
+        // pair.second - це unique_ptr<BaseUser>
+        cout << "- " << pair.second->GetUsername()
+            << " [" << pair.second->GetUserType() << "]" << endl;
     }
     cout << "-----------------" << endl;
 }
 
-// --- Приватні методи ---
+// --- Приватні методи (Завантаження/Збереження) ---
 
 void AuthManager::LoadUsers()
 {
-    // Вимога 4.4, 4.5: формат username:password
     ifstream file(this->usersFilePath);
     if (!file.is_open())
     {
         cout << "Users file not found. Creating a new one with default admin..."
             << endl;
-        // Файлу немає, створюємо admin'а і зберігаємо
-        this->users[ADMIN_USERNAME] = ADMIN_DEFAULT_PASS;
-        this->SaveUsers();
+
+        // Створюємо default адміна
+        this->users[ADMIN_USERNAME] =
+            make_unique<AdminUser>(ADMIN_USERNAME, ADMIN_DEFAULT_PASS);
+
+        this->SaveUsers(); // Зберігаємо новий файл
         return;
     }
 
@@ -208,16 +227,28 @@ void AuthManager::LoadUsers()
         if (line.empty()) continue;
 
         stringstream ss(line);
-        string username, password;
+        string userType, username, password;
 
-        // Роздільник ':' (або ' ', як у прикладі "admin admin123")
-        // Вимога 4.5: "username:password"
-        // Вимога 1.6: "(наприклад: admin:admin123)"
-        // Будемо дотримуватись формату з ':'
-
-        if (getline(ss, username, ':') && getline(ss, password))
+        // Новий формат: Type:Username:Password (вимога 4.5, 1.6)
+        if (getline(ss, userType, ':') &&
+            getline(ss, username, ':') &&
+            getline(ss, password))
         {
-            this->users[username] = password;
+            if (userType == "Admin")
+            {
+                this->users[username] =
+                    make_unique<AdminUser>(username, password);
+            }
+            else if (userType == "Standard")
+            {
+                this->users[username] =
+                    make_unique<StandardUser>(username, password);
+            }
+            else
+            {
+                cerr << "Warning: Skipping line " << lineCount
+                    << " (unknown user type: " << userType << ")" << endl;
+            }
         }
         else
         {
@@ -230,7 +261,8 @@ void AuthManager::LoadUsers()
     if (this->users.find(ADMIN_USERNAME) == this->users.end())
     {
         cout << "Admin user not found. Adding default admin..." << endl;
-        this->users[ADMIN_USERNAME] = ADMIN_DEFAULT_PASS;
+        this->users[ADMIN_USERNAME] =
+            make_unique<AdminUser>(ADMIN_USERNAME, ADMIN_DEFAULT_PASS);
         this->SaveUsers(); // Додаємо адміна у файл
     }
 
@@ -242,16 +274,15 @@ void AuthManager::SaveUsers() const
 {
     ofstream file(this->usersFilePath);
     if (!file.is_open())
-        * {
-        // Вимога 3.2
+    {
         throw runtime_error("Could not open users file for writing: "
             + this->usersFilePath);
     }
 
     for (const auto& pair : this->users)
     {
-        // Зберігаємо у форматі username:password
-        file << pair.first << ":" << pair.second << endl;
+        // Викликаємо поліморфний метод ToFileString()
+        file << pair.second->ToFileString() << endl;
     }
     file.close();
 }

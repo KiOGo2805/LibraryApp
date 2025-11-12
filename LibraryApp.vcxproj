@@ -123,19 +123,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AdminUser.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="AuthManager.cpp" />
+    <ClCompile Include="BaseUser.cpp" />
     <ClCompile Include="Book.cpp" />
     <ClCompile Include="IStorable.cpp" />
     <ClCompile Include="Library.cpp" />
     <ClCompile Include="LibraryApp.cpp" />
+    <ClCompile Include="StandardUser.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AdminUser.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="AuthManager.h" />
+    <ClInclude Include="BaseUser.h" />
     <ClInclude Include="Book.h" />
     <ClInclude Include="IStorable.h" />
     <ClInclude Include="Library.h" />
+    <ClInclude Include="StandardUser.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
