@@ -1,6 +1,3 @@
-// Цей файл містить реалізацію методів класу AuthManager.
-
-
 #include "AuthManager.h"
 #include "StandardUser.h"
 #include "AdminUser.h"
@@ -171,8 +168,11 @@ void AuthManager::ListUsers() const
 
     for (const auto& pair : this->users)
     {
+        string type = pair.second->GetUserType();
+        string displayType = (type == "Admin") ? "Адміністратор" : "Читач";
+
         cout << "- " << pair.second->GetUsername()
-            << " [" << pair.second->GetUserType() << "]\n";
+            << " [" << displayType << "]\n";
     }
 }
 
@@ -209,7 +209,7 @@ void AuthManager::LoadUsers()
                 this->users[username] =
                     make_unique<AdminUser>(username, password);
             }
-            else if (userType == "Standard")
+            else if (userType == "User" || userType == "Standard")
             {
                 this->users[username] =
                     make_unique<StandardUser>(username, password);

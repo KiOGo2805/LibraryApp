@@ -1,5 +1,3 @@
-// Цей файл містить реалізацію методів класу Library.
-
 #include "Library.h"
 #include <iostream>
 #include <fstream>
@@ -8,7 +6,6 @@
 #include <stdexcept>
 
 using namespace std;
-
 
 Library::Library(const string& dataFilePath)
     : dataFilePath(dataFilePath)
@@ -28,8 +25,8 @@ Library::~Library()
     try
     {
         this->SaveToFile();
-        cout << "Дані бібліотеки успішно збережено у файл "
-            << this->dataFilePath << "\n";
+        cout << "Дані бібліотеки успішно збережено у файл " 
+             << this->dataFilePath << "\n";
     }
     catch (const exception& e)
     {
@@ -41,11 +38,11 @@ bool Library::AddBook(const Book& book)
 {
     if (this->FindBookByArticle(book.GetId()) != nullptr)
     {
-        cerr << "Помилка: Книга з артикулом "
-            << book.GetId() << " вже існує.\n";
+        cerr << "Помилка: Книга з артикулом " 
+             << book.GetId() << " вже існує.\n";
         return false;
     }
-
+    
     this->books.push_back(book);
     return true;
 }
@@ -176,7 +173,6 @@ bool Library::IsEmpty() const
     return this->books.empty();
 }
 
-
 void Library::LoadFromFile()
 {
     ifstream file(this->dataFilePath);
@@ -193,7 +189,7 @@ void Library::LoadFromFile()
 
         stringstream ss(line);
         string field;
-
+        
         string article, authorName, bookTitle, readerFullName;
         double price;
         int shelfNumber;
@@ -203,10 +199,10 @@ void Library::LoadFromFile()
             getline(ss, article, ',');
             getline(ss, authorName, ',');
             getline(ss, bookTitle, ',');
-
+            
             getline(ss, field, ',');
             price = stod(field);
-
+            
             getline(ss, field, ',');
             shelfNumber = stoi(field);
 
@@ -219,13 +215,13 @@ void Library::LoadFromFile()
         }
         catch (const invalid_argument& e)
         {
-            cerr << "Попередження: Пропущено пошкоджені дані (невірний формат числа): "
-                << line << "\n";
+            cerr << "Попередження: Пропущено пошкоджені дані (невірний формат числа): " 
+                 << line << "\n";
         }
         catch (const out_of_range& e)
         {
-            cerr << "Попередження: Пропущено пошкоджені дані (число за межами діапазону): "
-                << line << "\n";
+             cerr << "Попередження: Пропущено пошкоджені дані (число за межами діапазону): " 
+                 << line << "\n";
         }
     }
     file.close();
@@ -237,8 +233,8 @@ void Library::SaveToFile()
     ofstream file(this->dataFilePath);
     if (!file.is_open())
     {
-        throw runtime_error("Не вдалося відкрити файл для запису: "
-            + this->dataFilePath);
+        throw runtime_error("Не вдалося відкрити файл для запису: " 
+                            + this->dataFilePath);
     }
 
     for (const Book& book : this->books)

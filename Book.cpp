@@ -1,5 +1,3 @@
-// ÷ей файл м≥стить реал≥зац≥ю метод≥в класу Book.
-
 #include "Book.h"
 #include <iostream>
 #include <sstream>

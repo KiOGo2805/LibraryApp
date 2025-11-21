@@ -1,5 +1,3 @@
-// Цей файл містить реалізацію методів класу AdminUser.
-
 #include "AdminUser.h"
 
 using namespace std;
@@ -21,7 +19,7 @@ bool AdminUser::CheckPassword(const string& password) const
 
 string AdminUser::GetUserType() const
 {
-    return "Адміністратор";
+    return "Admin";
 }
 
 bool AdminUser::IsAdmin() const

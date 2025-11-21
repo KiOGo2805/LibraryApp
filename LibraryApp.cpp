@@ -1,5 +1,3 @@
-// Створює та запускає об'єкт Application.
-
 #include "Application.h"
 #include <iostream>
 #include <exception>

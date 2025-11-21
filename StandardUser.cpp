@@ -1,5 +1,3 @@
-// ÷ей файл м≥стить реал≥зац≥ю метод≥в класу StandardUser.
-
 #include "StandardUser.h"
 
 using namespace std;
@@ -21,7 +19,7 @@ bool StandardUser::CheckPassword(const string& password) const
 
 string StandardUser::GetUserType() const
 {
-    return "Standard";
+    return "User";
 }
 
 bool StandardUser::IsAdmin() const

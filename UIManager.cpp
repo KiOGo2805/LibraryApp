@@ -1,5 +1,3 @@
-// Цей файл містить реалізацію методів класу UIManager.
-
 #include "UIManager.h"
 #include "Library.h"
 #include "AuthManager.h"
@@ -353,6 +351,7 @@ void UIManager::DoUpdateBook()
 {
     cout << "\n--- Оновлення Книги ---\n";
 
+    // Очищуємо буфер (виправляємо баг з пропуском вводу)
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     cout << "Введіть Артикул книги для оновлення: ";
@@ -510,7 +509,6 @@ void UIManager::DoListUsers()
     cout << "\n--- Список Користувачів ---\n";
     authManager->ListUsers();
     PressEnterToContinue();
-    cout << "---------------------------\n";
 }
 
 void UIManager::DoCreateUser()

@@ -1,5 +1,3 @@
-// ÷ей файл м≥стить реал≥зац≥ю метод≥в класу Application.
-
 #include "Application.h"
 #include <iostream>
 
