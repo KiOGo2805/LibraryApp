@@ -1,2 +1,1 @@
-Адміністратор:admin:admin123
-Standard:testUser:testUser123
+Admin:admin:admin123
