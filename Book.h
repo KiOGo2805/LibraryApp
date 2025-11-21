@@ -1,16 +1,15 @@
 #pragma once
 
-/*
+/**
  * Цей файл оголошує клас Book.
  * Book представляє сутність "книга" у бібліотеці, містить її дані
  * та реалізує інтерфейс IStorable.
  */
 
-#include "IStorable.h" // Включаємо наш абстрактний базовий клас
+#include "IStorable.h"
 #include <string>
-#include <iostream> // Для деструктора з повідомленням
+#include <iostream>
 
- // Згідно з Додатком А (1.2), використовуємо простір імен
 using namespace std;
 
 /**
@@ -22,14 +21,7 @@ using namespace std;
  */
 class Book : public IStorable
 {
-    // Згідно з Додатком А (1.3), порядок: 1) поля, 2) конструктори...
-    // Але також вимога (3): "Імена закритих полів... нотації «верблюд»"
-    // І вимога (1.3): "властивості... public, notim protected, notim private"
-    // Це трохи суперечливо. Зробимо за стандартом C++: поля в private.
-
 public:
-    // --- 2. Конструктори ---
-
     /**
      * @brief Конструктор за замовчуванням.
      */
@@ -64,8 +56,6 @@ public:
      */
     ~Book();
 
-    // --- 3. Властивості (Методи Get/Set) ---
-
     /**
      * @brief Встановлює артикул книги.
      * @param article Новий артикул.
@@ -93,13 +83,8 @@ public:
     void SetReaderFullName(const string& readerFullName);
     string GetReaderFullName() const;
 
-    // --- 4. Методи ---
-
-    // Реалізація віртуальних методів з IStorable
     string GetId() const override;
     string GetTypeName() const override;
-
-    // 5 власних методів (вимога 2.3)
 
     /**
      * @brief Перевіряє, чи книга доступна (не на руках у читача).
@@ -129,8 +114,6 @@ public:
      */
     string ToCsvString() const;
 
-    // --- 5. Оператори ---
-
     /**
      * @brief Копіювальний оператор присвоєння (вимога 2.3).
      * @param other Інший об'єкт Book для копіювання.
@@ -139,12 +122,8 @@ public:
     Book& operator=(const Book& other);
 
 protected:
-    // Немає захищених членів
 
 private:
-    // --- 1. Поля ---
-    // (Імена в camelCase, як вимагає пункт 3 для приватних полів)
-
     string article;
     string authorName;
     string bookTitle;

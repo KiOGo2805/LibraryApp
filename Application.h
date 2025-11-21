@@ -1,11 +1,9 @@
 #pragma once
 
-/*
- * Цей файл оголошує клас Application.
- * Application - це головний клас програми, який "володіє"
- * всіма основними менеджерами (Library, AuthManager)
- * та керує головним циклом програми.
- */
+// Цей файл оголошує клас Application.
+// Application - це головний клас програми, який "володіє"
+// всіма основними менеджерами (Library, AuthManager)
+// та керує головним циклом програми.
 
 #include "Library.h"
 #include "AuthManager.h"
@@ -39,14 +37,9 @@ public:
     void Run();
 
 private:
-    // --- Головні менеджери ---
-
-    // "Мотор" для роботи з книгами
     Library library;
 
-    // "Мотор" для роботи з користувачами
     AuthManager authManager;
 
-    // "Панель приладів" (інтерфейс)
     UIManager uiManager;
 };

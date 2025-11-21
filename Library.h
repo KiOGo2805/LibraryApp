@@ -1,14 +1,12 @@
 #pragma once
 
-/*
- * Цей файл оголошує клас Library.
- * Library — це менеджер-клас, який керує колекцією об'єктів Book,
- * відповідає за їх завантаження, збереження та маніпуляції.
- */
+// Цей файл оголошує клас Library.
+// Library — це менеджер-клас, який керує колекцією об'єктів Book,
+// відповідає за їх завантаження, збереження та маніпуляції.
 
-#include "Book.h"      // Оскільки ми зберігаємо об'єкти Book
-#include <vector>      // Для std::vector (вимога 2.4)
-#include <string>      // Для параметрів та полів
+#include "Book.h"
+#include <vector>
+#include <string>
 
  /**
   * @class Library
@@ -32,8 +30,6 @@ public:
      */
     ~Library();
 
-    // --- 1. Основні операції (CRUD) ---
-
     /**
      * @brief Додає нову книгу до бібліотеки.
      * @param book Об'єкт Book, який потрібно додати.
@@ -56,8 +52,6 @@ public:
      */
     bool UpdateBook(const std::string& article, const Book& newBookData);
 
-    // --- 2. Пошук (Завдання 1) ---
-
     /**
      * @brief Знаходить книгу за артикулом.
      * @param article Артикул для пошуку.
@@ -71,8 +65,6 @@ public:
      * @return Вказівник на константну книгу, або nullptr.
      */
     const Book* FindBookByArticle(const std::string& article) const;
-
-    // --- 3. Фільтрація (Завдання 2) ---
 
     /**
      * @brief Формує список книг за ім'ям автора.
@@ -88,13 +80,9 @@ public:
      */
     std::vector<Book> FilterByShelf(int shelfNumber) const;
 
-    // --- 4. Сортування (Вимога 2.5) ---
-
     void SortByTitle();
     void SortByAuthor();
     void SortByPrice();
-
-    // --- 5. Допоміжні методи ---
 
     /**
      * @brief Отримує посилання на повний список книг.
@@ -121,8 +109,7 @@ private:
      */
     void SaveToFile();
 
-    // Приватні поля (camelCase)
-    std::vector<Book> books; // Вимога 2.4: "std::vector"
+    std::vector<Book> books;
     std::string dataFilePath;
 };
 

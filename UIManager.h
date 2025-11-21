@@ -1,16 +1,12 @@
 #pragma once
 
-/*
- * Цей файл оголошує клас UIManager.
- * UIManager відповідає за всю взаємодію з користувачем:
- * показ меню, обробку вводу та виклик відповідних
- * методів у Library та AuthManager.
- */
+// Цей файл оголошує клас UIManager.
+// UIManager відповідає за всю взаємодію з користувачем:
+// показ меню, обробку вводу та виклик відповідних
+// методів у Library та AuthManager.
 
-#include <string> // Потрібен для GetStringInput
+#include <string>
 
- // Пряме оголошення, щоб уникнути циклічних залежностей у .h
- // Ми не можемо включати Library.h чи AuthManager.h тут.
 class Library;
 class AuthManager;
 
@@ -38,8 +34,6 @@ public:
     void StartMainLoop();
 
 private:
-    // --- Головні цикли меню ---
-
     /**
      * @brief Показує екран логіна, доки користувач не увійде.
      * @return true, якщо вхід успішний, false - якщо користувач вийшов.
@@ -65,8 +59,6 @@ private:
      * @brief Показує екран допомоги (вимога 5).
      */
     void ShowHelpScreen();
-
-    // --- Допоміжні функції (Отримання вводу) ---
 
     /**
      * @brief Отримує та валідує вибір користувача в меню.
@@ -108,7 +100,6 @@ private:
      */
     void PressEnterToContinue();
 
-    // --- Функції-дії (для книг) ---
     void DoAddBook();
     void DoListAllBooks();
     void DoFindBookByArticle();
@@ -119,12 +110,10 @@ private:
     void DoIssueBook();
     void DoReturnBook();
 
-    // --- Функції-дії (для користувачів) ---
     void DoCreateUser();
     void DoDeleteUser();
     void DoListUsers();
 
-    // Вказівники на наші "мотори"
     Library* library;
     AuthManager* authManager;
 };

@@ -1,15 +1,12 @@
-/*
- * Цей файл містить реалізацію методів класу StandardUser.
- */
+// Цей файл містить реалізацію методів класу StandardUser.
 
-#include "StandardUser.h" // Він має включати СВІЙ .h файл
+#include "StandardUser.h"
 
-using namespace std; // Можна додати для зручності
+using namespace std;
 
 StandardUser::StandardUser(const string& username, const string& password)
     : username(username), password(password)
 {
-    // Тіло конструктора
 }
 
 string StandardUser::GetUsername() const
@@ -29,13 +26,10 @@ string StandardUser::GetUserType() const
 
 bool StandardUser::IsAdmin() const
 {
-    // Звичайний користувач НЕ є адміном
     return false;
 }
 
 string StandardUser::ToFileString() const
 {
-    // Формат: Type:Username:Password
-    // Наприклад: Standard:someuser:pass123
     return this->GetUserType() + ":" + this->username + ":" + this->password;
 }

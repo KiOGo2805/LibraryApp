@@ -1,17 +1,11 @@
-/*
- * Цей файл містить реалізацію методів класу Book.
- */
+// Цей файл містить реалізацію методів класу Book.
 
 #include "Book.h"
-#include <iostream>  // Для std::cout (у Display та деструкторі)
-#include <sstream>   // Для ToCsvString (для форматування рядка)
-#include <iomanip>   // Для std::setprecision (для форматування ціни)
+#include <iostream>
+#include <sstream>
+#include <iomanip>
 
- // Тут безпечно використовувати "using namespace std",
- // оскільки це .cpp файл і він не вплине на інші файли.
 using namespace std;
-
-// --- 2. Конструктори та Деструктор ---
 
 Book::Book()
     : article("N/A"),
@@ -21,7 +15,6 @@ Book::Book()
     shelfNumber(0),
     readerFullName("")
 {
-    // Тіло конструктора за замовчуванням
 }
 
 Book::Book(
@@ -39,8 +32,6 @@ Book::Book(
     shelfNumber(shelfNumber),
     readerFullName(readerFullName)
 {
-    // Тіло конструктора з параметрами
-    // Використовуємо список ініціалізації для присвоєння полів
 }
 
 Book::Book(const Book& other)
@@ -51,18 +42,14 @@ Book::Book(const Book& other)
     shelfNumber(other.shelfNumber),
     readerFullName(other.readerFullName)
 {
-    // Тіло конструктора копіювання
 }
 
 Book::~Book()
 {
-    // Вимога 2.3: "деструктор з повідомленням про знищення"
-    cout << "Book object '" << this->bookTitle
-        << "' (Art: " << this->article
-        << ") is being destroyed." << endl;
+    cout << "Об'єкт книги '" << this->bookTitle
+        << "' (Арт: " << this->article
+        << ") знищується.\n";
 }
-
-// --- 3. Властивості (Методи Get/Set) ---
 
 void Book::SetArticle(const string& article)
 {
@@ -124,9 +111,6 @@ string Book::GetReaderFullName() const
     return this->readerFullName;
 }
 
-// --- 4. Методи ---
-
-// Реалізація методів інтерфейсу IStorable
 string Book::GetId() const
 {
     return this->article;
@@ -137,10 +121,8 @@ string Book::GetTypeName() const
     return "Book";
 }
 
-// 5 власних методів (вимога 2.3)
 bool Book::IsAvailable() const
 {
-    // Якщо ім'я читача порожнє, книга доступна
     return this->readerFullName.empty();
 }
 
@@ -151,40 +133,36 @@ void Book::IssueToReader(const string& readerName)
 
 void Book::ReturnToLibrary()
 {
-    this->readerFullName = ""; // Очищуємо ім'я читача
+    this->readerFullName = "";
 }
 
 void Book::Display() const
 {
-    cout << "----------------------------------------" << endl;
-    cout << "Title:    " << this->bookTitle << endl;
-    cout << "Author:   " << this->authorName << endl;
-    cout << "Article:  " << this->article << endl;
-    cout << "Price:    " << fixed << setprecision(2) << this->price << " UAH" << endl;
-    cout << "Shelf:    " << this->shelfNumber << endl;
+    cout << "----------------------------------------\n";
+    cout << "Назва:    " << this->bookTitle << "\n";
+    cout << "Автор:    " << this->authorName << "\n";
+    cout << "Артикул:  " << this->article << "\n";
+    cout << "Ціна:     " << fixed << setprecision(2) << this->price << " грн\n";
+    cout << "Полиця:   " << this->shelfNumber << "\n";
 
     if (IsAvailable())
     {
-        cout << "Status:   Available" << endl;
+        cout << "Статус:   Доступна\n";
     }
     else
     {
-        cout << "Status:   Issued to " << this->readerFullName << endl;
+        cout << "Статус:   Видана читачу " << this->readerFullName << "\n";
     }
-    cout << "----------------------------------------" << endl;
+    cout << "----------------------------------------\n";
 }
 
 string Book::ToCsvString() const
 {
-    // Використовуємо stringstream для простої конвертації
     stringstream ss;
 
-    // Форматуємо ціну з 2 знаками після коми
     ss << fixed << setprecision(2) << this->price;
     string formattedPrice = ss.str();
 
-    // Формуємо CSV рядок (вимога 4.3)
-    // Увага: цей простий CSV не обробляє коми всередині полів.
     string csvRow = this->article + "," +
         this->authorName + "," +
         this->bookTitle + "," +
@@ -195,17 +173,13 @@ string Book::ToCsvString() const
     return csvRow;
 }
 
-// --- 5. Оператори ---
-
 Book& Book::operator=(const Book& other)
 {
-    // 1. Перевірка на самоприсвоєння (важливо!)
     if (this == &other)
     {
         return *this;
     }
 
-    // 2. Копіюємо дані
     this->article = other.article;
     this->authorName = other.authorName;
     this->bookTitle = other.bookTitle;
@@ -213,6 +187,5 @@ Book& Book::operator=(const Book& other)
     this->shelfNumber = other.shelfNumber;
     this->readerFullName = other.readerFullName;
 
-    // 3. Повертаємо *this
     return *this;
 }

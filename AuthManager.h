@@ -1,17 +1,13 @@
 #pragma once
 
-/*
- * Цей файл оголошує клас AuthManager.
- * AuthManager відповідає за автентифікацію, авторизацію
- * та управління обліковими записами користувачів.
- *
- * Ця версія використовує поліморфізм та ієрархію класів BaseUser.
- */
+// Цей файл оголошує клас AuthManager.
+// AuthManager відповідає за автентифікацію, авторизацію
+// та управління обліковими записами користувачів.
 
-#include "BaseUser.h" // Наш новий абстрактний клас
+#include "BaseUser.h"
 #include <string>
 #include <map>
-#include <memory> // Для std::unique_ptr
+#include <memory>
 
  /**
   * @class AuthManager
@@ -35,7 +31,6 @@ public:
      */
     ~AuthManager();
 
-    // Забороняємо копіювання, оскільки керуємо унікальними ресурсами
     AuthManager(const AuthManager&) = delete;
     AuthManager& operator=(const AuthManager&) = delete;
 
@@ -70,8 +65,6 @@ public:
      * @return Логін поточного користувача або порожній рядок.
      */
     std::string GetCurrentUser() const;
-
-    // --- Адмін-функції (Виконуються, лише якщо IsAdmin() == true) ---
 
     /**
      * @brief Створює нового користувача (тільки для адміна).
@@ -109,15 +102,9 @@ private:
      */
     void SaveUsers() const;
 
-    // Приватні поля (camelCase)
     std::string usersFilePath;
 
-    // Ми зберігаємо вказівники на базовий клас, але вони вказують
-    // на реальні об'єкти (AdminUser або StandardUser).
-    // Ключ - це логін (для швидкого пошуку O(log N)).
     std::map<std::string, std::unique_ptr<BaseUser>> users;
 
-    // Вказівник на поточного залогованого користувача.
-    // Це "неволодіючий" вказівник. Об'єкт живе всередині 'users'.
     BaseUser* currentUser;
 };

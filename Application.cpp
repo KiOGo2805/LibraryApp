@@ -1,6 +1,4 @@
-/*
- * Цей файл містить реалізацію методів класу Application.
- */
+// Цей файл містить реалізацію методів класу Application.
 
 #include "Application.h"
 #include <iostream>
@@ -11,27 +9,24 @@ namespace
     const std::string USERS_FILE_PATH = "users.txt";
 }
 
-// 3. ОНОВИТИ СПИСОК ІНІЦІАЛІЗАЦІЇ
 Application::Application()
     : library(DB_FILE_PATH),
     authManager(USERS_FILE_PATH),
-    uiManager(&library, &authManager) // <-- Передаємо вказівники
+    uiManager(&library, &authManager)
 {
-    std::cout << "Application initialized." << std::endl;
+    std::cout << "Додаток ініціалізовано.\n";
 }
 
 Application::~Application()
 {
-    std::cout << "Application shutting down." << std::endl;
+    std::cout << "Додаток завершує роботу.\n";
 }
 
-// 4. ОНОВИТИ МЕТОД RUN
 void Application::Run()
 {
-    std::cout << "Application is running..." << std::endl;
+    std::cout << "Додаток запущено...\n";
 
-    // Запускаємо головний цикл інтерфейсу
     uiManager.StartMainLoop();
 
-    std::cout << "Application finished." << endl;
+    std::cout << "Робота додатка завершена.\n";
 }

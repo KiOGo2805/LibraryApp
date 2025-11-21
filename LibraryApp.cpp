@@ -1,42 +1,30 @@
-/*
- * Головний файл програми (точка входу).
- * Створює та запускає об'єкт Application.
- */
+// Створює та запускає об'єкт Application.
 
-#include "Application.h" // Включаємо наш головний клас
-#include <iostream>      // Для std::cerr
-#include <exception>     // Для std::exception
+#include "Application.h"
+#include <iostream>
+#include <exception>
+#include <Windows.h>
 
 int main()
 {
-    // Вимога 3.2: Необхідна обробка виключень
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+
     try
     {
-        // 1. Створюємо об'єкт програми.
-        // (У цей момент викликається конструктор Application,
-        // який створює менеджери і завантажує файли)
         Application app;
-
-        // 2. Запускаємо головний цикл програми.
         app.Run();
     }
     catch (const std::exception& e)
     {
-        // Глобальний обробник для будь-яких критичних помилок
-        // (наприклад, не вдалося зберегти файл)
-        std::cerr << "CRITICAL ERROR: " << e.what() << std::endl;
-        return 1; // Повертаємо код помилки
+        std::cerr << "КРИТИЧНА ПОМИЛКА: " << e.what() << "\n";
+        return 1;
     }
     catch (...)
     {
-        // Ловимо всі інші можливі невідомі помилки
-        std::cerr << "An unknown critical error occurred." << std::endl;
+        std::cerr << "Виникла невідома критична помилка.\n";
         return 2;
     }
 
-    // 3. Програма успішно завершена.
-    // (У цей момент 'app' виходить з області видимості,
-    // викликається деструктор ~Application,
-    // який зберігає всі дані)
     return 0;
 }

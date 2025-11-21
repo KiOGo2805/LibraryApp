@@ -1,9 +1,7 @@
 #pragma once
 
-/*
- * Цей файл оголошує клас StandardUser.
- * Це конкретний клас-нащадок від BaseUser для звичайного користувача.
- */
+// Цей файл оголошує клас StandardUser.
+// Це конкретний клас-нащадок від BaseUser для звичайного користувача.
 
 #include "BaseUser.h"
 #include <string>
@@ -25,8 +23,6 @@ public:
      */
     StandardUser(const std::string& username, const std::string& password);
 
-    // --- Реалізація віртуальних методів ---
-
     std::string GetUsername() const override;
     bool CheckPassword(const std::string& password) const override;
     std::string GetUserType() const override;
@@ -35,5 +31,5 @@ public:
 
 private:
     std::string username;
-    std::string password; // У реальному проекті тут був би хеш
+    std::string password;
 };

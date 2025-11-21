@@ -1,80 +1,75 @@
-/*
- * Цей файл містить реалізацію методів класу UIManager.
- * Він керує всією логікою консольного інтерфейсу.
- */
+// Цей файл містить реалізацію методів класу UIManager.
 
 #include "UIManager.h"
 #include "Library.h"
 #include "AuthManager.h"
 #include <iostream>
 #include <string>
-#include <limits>    // Для std::numeric_limits
-#include <stdexcept> // Для std::stod, std::stoi
+#include <limits>
+#include <stdexcept>
 
 using namespace std;
 
 UIManager::UIManager(Library* library, AuthManager* authManager)
     : library(library), authManager(authManager)
 {
-    // Перевірка, чи "мотори" на місці
     if (this->library == nullptr || this->authManager == nullptr)
     {
-        // Це критична помилка, програма не може працювати
-        throw runtime_error("UIManager: Managers cannot be null.");
+        throw runtime_error("UIManager: Менеджери не ініціалізовані (null).");
     }
 }
 
-// --- Головний цикл ---
-
 void UIManager::StartMainLoop()
 {
-    // 1. Спочатку логін
-    bool loggedIn = HandleLogin();
-
-    // 2. Якщо увійшли, показуємо ВІДПОВІДНЕ меню
-    if (loggedIn)
+    while (true)
     {
+        bool loggedIn = HandleLogin();
+
+        if (!loggedIn)
+        {
+            break;
+        }
+
         if (authManager->IsAdmin())
         {
-            ShowAdminMainMenu(); // Викликаємо велике меню
+            ShowAdminMainMenu();
         }
         else
         {
-            ShowUserMainMenu(); // Викликаємо маленьке меню
+            ShowUserMainMenu();
         }
     }
 
-    cout << "Exiting application. Goodbye!" << endl;
+    cout << "Завершення роботи програми. До побачення!\n";
 }
 
 bool UIManager::HandleLogin()
 {
     while (true)
     {
-        cout << "\n--- Library Login ---" << endl;
-        cout << "1. Login" << endl;
-        cout << "2. Exit" << endl;
+        cout << "\n--- Вхід до Системи ---\n";
+        cout << "1. Увійти\n";
+        cout << "2. Вийти\n";
         int choice = GetMenuChoice(2);
 
         if (choice == 2)
         {
-            return false; // Користувач вийшов
+            return false;
         }
 
-        string username = GetStringInput("Enter username:");
-        string password = GetStringInput("Enter password:");
+        string username = GetStringInput("Введіть логін:");
+        string password = GetStringInput("Введіть пароль:");
 
         if (authManager->Login(username, password))
         {
-            cout << "Login successful. Welcome, "
-                << authManager->GetCurrentUser() << "!" << endl;
+            cout << "Вхід успішний. Вітаємо, "
+                << authManager->GetCurrentUser() << "!\n";
             PressEnterToContinue();
-            return true; // Успішний вхід
+            return true;
         }
         else
         {
-            // Вимога 3.2: "некоректне введення"
-            cout << "Error: Invalid username or password." << endl;
+            cout << "Помилка: Невірний логін або пароль.\n";
             PressEnterToContinue();
         }
     }
@@ -85,23 +80,26 @@ void UIManager::ShowAdminMainMenu()
     bool running = true;
     while (running)
     {
-        cout << "\n--- Main Menu (Admin) ---" << endl;
-        cout << "Current User: " << authManager->GetCurrentUser() << endl;
-        cout << "--- Book Management ---" << endl;
-        cout << "1. List all books" << endl;
-        cout << "2. Add a new book" << endl;
-        cout << "3. Update a book" << endl;
-        cout << "4. Delete a book" << endl;
-        cout << "--- Book Actions ---" << endl;
-        cout << "5. Find book (by Article)" << endl;
-        cout << "6. Filter books" << endl;
-        cout << "7. Sort books" << endl;
-        cout << "8. Issue book to reader" << endl;
-        cout << "9. Return book to library" << endl;
-        cout << "--- System ---" << endl;
-        cout << "10. Admin (User Management)" << endl;
-        cout << "11. Help" << endl;
-        cout << "12. Logout & Exit" << endl;
+        cout << "\n--- Головне Меню (Адміністратор) ---\n";
+        cout << "Користувач: " << authManager->GetCurrentUser() << "\n";
+
+        cout << "--- Керування Книгами ---\n";
+        cout << "1. Список усіх книг\n";
+        cout << "2. Додати нову книгу\n";
+        cout << "3. Оновити книгу\n";
+        cout << "4. Видалити книгу\n";
+
+        cout << "--- Дії з Книгами ---\n";
+        cout << "5. Пошук книги (за Артикулом)\n";
+        cout << "6. Фільтрація книг\n";
+        cout << "7. Сортування книг\n";
+        cout << "8. Видати книгу читачу\n";
+        cout << "9. Повернути книгу в бібліотеку\n";
+
+        cout << "--- Система ---\n";
+        cout << "10. Адміністрування (Користувачі)\n";
+        cout << "11. Допомога\n";
+        cout << "12. Вийти з акаунту\n";
 
         int choice = GetMenuChoice(12);
 
@@ -119,7 +117,7 @@ void UIManager::ShowAdminMainMenu()
         case 10: ShowAdminMenu(); break;
         case 11: ShowHelpScreen(); break;
         case 12:
-            running = false; // Вихід з циклу
+            running = false;
             authManager->Logout();
             break;
         }
@@ -131,16 +129,16 @@ void UIManager::ShowUserMainMenu()
     bool running = true;
     while (running)
     {
-        cout << "\n--- Main Menu ---" << endl;
-        cout << "Current User: " << authManager->GetCurrentUser() << endl;
-        cout << "1. List all books" << endl;
-        cout << "2. Find book (by Article)" << endl;
-        cout << "3. Filter books" << endl;
-        cout << "4. Sort books" << endl;
-        cout << "5. Issue book (Take)" << endl;
-        cout << "6. Return book" << endl;
-        cout << "7. Help" << endl;
-        cout << "8. Logout & Exit" << endl;
+        cout << "\n--- Головне Меню ---\n";
+        cout << "Користувач: " << authManager->GetCurrentUser() << "\n";
+        cout << "1. Список усіх книг\n";
+        cout << "2. Пошук книги (за Артикулом)\n";
+        cout << "3. Фільтрація книг\n";
+        cout << "4. Сортування книг\n";
+        cout << "5. Взяти книгу (Видача)\n";
+        cout << "6. Повернути книгу\n";
+        cout << "7. Допомога\n";
+        cout << "8. Вийти з акаунту\n";
 
         int choice = GetMenuChoice(8);
 
@@ -154,7 +152,7 @@ void UIManager::ShowUserMainMenu()
         case 6: DoReturnBook(); break;
         case 7: ShowHelpScreen(); break;
         case 8:
-            running = false; // Вихід з циклу
+            running = false;
             authManager->Logout();
             break;
         }
@@ -166,11 +164,11 @@ void UIManager::ShowAdminMenu()
     bool running = true;
     while (running)
     {
-        cout << "\n--- Admin Menu (User Management) ---" << endl;
-        cout << "1. List all users" << endl;
-        cout << "2. Create a new user" << endl;
-        cout << "3. Delete a user" << endl;
-        cout << "4. Back to Main Menu" << endl;
+        cout << "\n--- Меню Адміністратора (Користувачі) ---\n";
+        cout << "1. Список усіх користувачів\n";
+        cout << "2. Створити нового користувача\n";
+        cout << "3. Видалити користувача\n";
+        cout << "4. Назад до Головного Меню\n";
 
         int choice = GetMenuChoice(4);
 
@@ -179,66 +177,60 @@ void UIManager::ShowAdminMenu()
         case 1: DoListUsers(); break;
         case 2: DoCreateUser(); break;
         case 3: DoDeleteUser(); break;
-        case 4: running = false; break; // Вихід з адмін-меню
+        case 4: running = false; break;
         }
     }
 }
 
 void UIManager::ShowHelpScreen()
 {
-    // Вимога 5
-    cout << "\n--- Help Screen ---" << endl;
-    cout << "This is a Library Management System." << endl;
+    cout << "\n--- Довідка ---\n";
+    cout << "Це автоматизована система управління бібліотекою.\n";
 
-    cout << "\n== Program Purpose ==" << endl;
-    cout << "To manage a collection of books, track their status "
-        << "(available/issued), and manage user accounts." << endl;
+    cout << "\n== Призначення програми ==\n";
+    cout << "Керування колекцією книг, відстеження їх статусу "
+        << "(доступна/видана) та управління користувачами.\n";
 
-    // Загальне правило, яке бачать всі
-    cout << "\n== General Rules ==" << endl;
-    cout << "- When asked (y/n), enter 'y' for yes or 'n' for no." << endl;
+    cout << "\n== Загальні правила ==\n";
+    cout << "- Коли система запитує (y/n), введіть 'y' (так) або 'n' (ні).\n";
 
-    cout << "\n== Command Descriptions ==" << endl;
-    cout << "List all books: Shows all books currently in the database." << endl;
-    cout << "Find book: Searches for one book by its Article ID." << endl;
-    cout << "Filter books: Shows all books matching a criteria (e.g., author)." << endl;
-    cout << "Sort books: Sorts the entire list by title, author, or price." << endl;
-    cout << "Issue book (Take): Mark a book as 'taken' by a reader." << endl;
-    cout << "Return book: Mark a book as 'available' in the library." << endl;
+    cout << "\n== Опис команд ==\n";
+    cout << "Список усіх книг: Показати всі книги, що є в базі.\n";
+    cout << "Пошук книги: Знайти одну книгу за унікальним Артикулом.\n";
+    cout << "Фільтрація: Показати книги за критерієм (автор або полиця).\n";
+    cout << "Сортування: Впорядкувати список за назвою, автором або ціною.\n";
+    cout << "Взяти книгу: Позначити книгу як видану читачу.\n";
+    cout << "Повернути книгу: Позначити книгу як доступну в бібліотеці.\n";
 
-    // Блок, який бачить ТІЛЬКИ адмін
     if (authManager->IsAdmin())
     {
-        cout << "\n== Admin-Only Data Input Rules ==" << endl;
-        cout << "- All inputs (e.g., Article, Title) cannot be empty." << endl;
-        cout << "- Article (ID) must be unique for each book." << endl;
-        cout << "- Price (e.g., 150.99) and Shelf (e.g., 5) "
-            << "must be positive numbers." << endl;
+        cout << "\n== Правила вводу даних (Тільки Адмін) ==\n";
+        cout << "- Поля не можуть бути порожніми.\n";
+        cout << "- Артикул має бути унікальним.\n";
+        cout << "- Ціна та номер полиці мають бути позитивними числами.\n";
 
-        cout << "\n== Admin Commands ==" << endl;
-        cout << "Add/Update/Delete Book: "
-            << "Manage the book catalog." << endl;
-        cout << "Admin (User Management): "
-            << "Create/Delete user accounts." << endl;
+        cout << "\n== Команди Адміністратора ==\n";
+        cout << "Додати/Оновити/Видалити книгу: "
+            << "Повне керування каталогом.\n";
+        cout << "Адміністрування (Користувачі): "
+            << "Створення та видалення акаунтів.\n";
     }
 
     PressEnterToContinue();
 }
 
-// --- Функції-дії (для книг) ---
-
 void UIManager::DoListAllBooks()
 {
-    cout << "\n--- All Books ---" << endl;
+    cout << "\n--- Список Усіх Книг ---\n";
     if (library->IsEmpty())
     {
-        cout << "The library is currently empty." << endl;
+        cout << "Бібліотека наразі порожня.\n";
     }
     else
     {
         for (const auto& book : library->GetAllBooks())
         {
-            book.Display(); // Використовуємо наш метод Display()
+            book.Display();
         }
     }
     PressEnterToContinue();
@@ -246,98 +238,92 @@ void UIManager::DoListAllBooks()
 
 void UIManager::DoAddBook()
 {
-    cout << "\n--- Add New Book ---" << endl;
+    cout << "\n--- Додавання Нової Книги ---\n";
     try
     {
-        string article = GetStringInput("Enter Article (unique):");
-        // Перевірка на унікальність
+        string article = GetStringInput("Введіть Артикул (унікальний):");
         if (library->FindBookByArticle(article) != nullptr)
         {
-            cout << "Error: A book with this article already exists." << endl;
+            cout << "Помилка: Книга з таким артикулом вже існує.\n";
             PressEnterToContinue();
             return;
         }
 
-        string title = GetStringInput("Enter Title:");
-        string author = GetStringInput("Enter Author:");
-        double price = GetDoubleInput("Enter Price:");
-        int shelf = GetIntInput("Enter Shelf Number:");
+        string title = GetStringInput("Введіть Назву:");
+        string author = GetStringInput("Введіть Автора:");
+        double price = GetDoubleInput("Введіть Ціну (грн):");
+        int shelf = GetIntInput("Введіть Номер Полиці:");
 
         Book newBook(article, author, title, price, shelf);
         if (library->AddBook(newBook))
         {
-            cout << "Book '" << title << "' added successfully." << endl;
+            cout << "Книгу '" << title << "' успішно додано.\n";
         }
     }
     catch (const exception& e)
     {
-        // Вимога 3.2
-        cout << "Error adding book: " << e.what() << endl;
+        cout << "Помилка при додаванні: " << e.what() << "\n";
     }
     PressEnterToContinue();
 }
 
 void UIManager::DoFindBookByArticle()
 {
-    // Завдання 1
-    cout << "\n--- Find Book by Article ---" << endl;
-    string article = GetStringInput("Enter Article to find:");
+    cout << "\n--- Пошук Книги за Артикулом ---\n";
+    string article = GetStringInput("Введіть Артикул для пошуку:");
 
     const Book* book = library->FindBookByArticle(article);
     if (book != nullptr)
     {
-        cout << "Book found:" << endl;
-        // Завдання: "визначити назву книги, автора і ПІБ читача"
-        cout << "Title: " << book->GetBookTitle() << endl;
-        cout << "Author: " << book->GetAuthorName() << endl;
+        cout << "Книгу знайдено:\n";
+        cout << "Назва: " << book->GetBookTitle() << "\n";
+        cout << "Автор: " << book->GetAuthorName() << "\n";
         if (book->IsAvailable())
         {
-            cout << "Status: Available" << endl;
+            cout << "Статус: Доступна\n";
         }
         else
         {
-            cout << "Status: Issued to " << book->GetReaderFullName() << endl;
+            cout << "Статус: Видана читачу " << book->GetReaderFullName() << "\n";
         }
     }
     else
     {
-        cout << "Sorry, no book found with that article." << endl;
+        cout << "На жаль, книги з таким артикулом не знайдено.\n";
     }
     PressEnterToContinue();
 }
 
 void UIManager::DoFilterBooks()
 {
-    // Завдання 2
-    cout << "\n--- Filter Books ---" << endl;
-    cout << "1. Filter by Author" << endl;
-    cout << "2. Filter by Shelf Number" << endl;
+    cout << "\n--- Фільтрація Книг ---\n";
+    cout << "1. За Автором\n";
+    cout << "2. За Номером Полиці\n";
     int choice = GetMenuChoice(2);
 
     vector<Book> results;
     if (choice == 1)
     {
-        string author = GetStringInput("Enter Author name:");
+        string author = GetStringInput("Введіть ім'я Автора:");
         results = library->FilterByAuthor(author);
     }
     else
     {
-        int shelf = GetIntInput("Enter Shelf Number:");
+        int shelf = GetIntInput("Введіть Номер Полиці:");
         results = library->FilterByShelf(shelf);
     }
 
     if (results.empty())
     {
-        cout << "No books found matching this criteria." << endl;
+        cout << "Книг за цим критерієм не знайдено.\n";
     }
     else
     {
-        cout << "Found " << results.size() << " books:" << endl;
+        cout << "Знайдено " << results.size() << " книг:\n";
         for (const auto& book : results)
         {
-            // Завдання: "сформувати базу даних з відомостей про назви книг"
             cout << "- " << book.GetBookTitle()
-                << " (by " << book.GetAuthorName() << ")" << endl;
+                << " (Автор: " << book.GetAuthorName() << ")\n";
         }
     }
     PressEnterToContinue();
@@ -345,161 +331,195 @@ void UIManager::DoFilterBooks()
 
 void UIManager::DoSortBooks()
 {
-    cout << "\n--- Sort Books ---" << endl;
-    cout << "1. Sort by Title" << endl;
-    cout << "2. Sort by Author" << endl;
-    cout << "3. Sort by Price" << endl;
+    cout << "\n--- Сортування Книг ---\n";
+    cout << "1. За Назвою\n";
+    cout << "2. За Автором\n";
+    cout << "3. За Ціною\n";
     int choice = GetMenuChoice(3);
 
     if (choice == 1) library->SortByTitle();
     else if (choice == 2) library->SortByAuthor();
     else if (choice == 3) library->SortByPrice();
 
-    cout << "Book list has been sorted." << endl;
-    cout << "Displaying sorted list:" << endl;
-    DoListAllBooks(); // Покажемо відсортований список
+    cout << "Список книг відсортовано.\n";
+    cout << "Відобразити список зараз?\n";
+    if (GetYesNoInput("Відобразити? (y/n):"))
+    {
+        DoListAllBooks();
+    }
 }
 
 void UIManager::DoUpdateBook()
 {
-    cout << "\n--- Update Book ---" << endl;
-    string article = GetStringInput("Enter Article of book to update:");
+    cout << "\n--- Оновлення Книги ---\n";
+
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    cout << "Введіть Артикул книги для оновлення: ";
+    string article;
+    getline(cin, article);
 
     Book* bookToUpdate = library->FindBookByArticle(article);
     if (bookToUpdate == nullptr)
     {
-        cout << "Error: Book not found." << endl;
+        cout << "Помилка: Книгу не знайдено.\n";
         PressEnterToContinue();
         return;
     }
 
-    cout << "Book found. Current data:" << endl;
+    cout << "Книгу знайдено. Поточні дані:\n";
     bookToUpdate->Display();
-    cout << "Enter new data:" << endl;
 
-    // Створюємо копію старих даних
+    cout << "Введіть нові дані (залиште порожнім, щоб зберегти старі):\n";
+
     Book updatedData = *bookToUpdate;
+    string input;
 
     try
     {
-        // Оновлюємо всі поля (для простоти)
-        string title = GetStringInput("Enter new Title:");
-        string author = GetStringInput("Enter new Author:");
-        double price = GetDoubleInput("Enter new Price:");
-        int shelf = GetIntInput("Enter new Shelf Number:");
+        cout << "Назва [" << bookToUpdate->GetBookTitle() << "]: ";
+        getline(cin, input);
+        if (!input.empty()) updatedData.SetBookTitle(input);
 
-        updatedData.SetBookTitle(title);
-        updatedData.SetAuthorName(author);
-        updatedData.SetPrice(price);
-        updatedData.SetShelfNumber(shelf);
-        // Статус (хто взяв) не чіпаємо
+        cout << "Автор [" << bookToUpdate->GetAuthorName() << "]: ";
+        getline(cin, input);
+        if (!input.empty()) updatedData.SetAuthorName(input);
+
+        cout << "Ціна [" << bookToUpdate->GetPrice() << "]: ";
+        getline(cin, input);
+        if (!input.empty())
+        {
+            double newPrice = stod(input);
+            if (newPrice >= 0) updatedData.SetPrice(newPrice);
+            else cout << "Попередження: Ціна не може бути від'ємною. Залишено старе значення.\n";
+        }
+
+        cout << "Полиця [" << bookToUpdate->GetShelfNumber() << "]: ";
+        getline(cin, input);
+        if (!input.empty())
+        {
+            int newShelf = stoi(input);
+            if (newShelf >= 0) updatedData.SetShelfNumber(newShelf);
+            else cout << "Попередження: Номер полиці має бути позитивним. Залишено старе значення.\n";
+        }
 
         if (library->UpdateBook(article, updatedData))
         {
-            cout << "Book updated successfully." << endl;
+            cout << "Книгу оновлено успішно.\n";
         }
     }
     catch (const exception& e)
     {
-        cout << "Error updating: " << e.what() << endl;
+        cout << "Помилка: Невірний формат числа. Оновлення скасовано.\n";
     }
-    PressEnterToContinue();
 }
 
 void UIManager::DoDeleteBook()
 {
-    cout << "\n--- Delete Book ---" << endl;
-    string article = GetStringInput("Enter Article of book to delete:");
+    cout << "\n--- Видалення Книги ---\n";
+    string article = GetStringInput("Введіть Артикул книги для видалення:");
 
     const Book* book = library->FindBookByArticle(article);
     if (book == nullptr)
     {
-        cout << "Error: Book not found." << endl;
+        cout << "Помилка: Книгу не знайдено.\n";
         PressEnterToContinue();
         return;
     }
 
-    cout << "Found book: " << book->GetBookTitle() << endl;
-    if (GetYesNoInput("Are you sure you want to delete it? (y/n):"))
+    cout << "Знайдено книгу: " << book->GetBookTitle() << "\n";
+    if (GetYesNoInput("Ви впевнені, що хочете видалити її? (y/n):"))
     {
         if (library->DeleteBook(article))
         {
-            cout << "Book deleted." << endl;
+            cout << "Книгу видалено.\n";
         }
         else
         {
-            cout << "Error: Deletion failed." << endl;
+            cout << "Помилка видалення.\n";
         }
     }
     else
     {
-        cout << "Deletion cancelled." << endl;
+        cout << "Видалення скасовано.\n";
     }
     PressEnterToContinue();
 }
 
 void UIManager::DoIssueBook()
 {
-    cout << "\n--- Issue Book ---" << endl;
-    string article = GetStringInput("Enter Article of book to issue:");
+    cout << "\n--- Видача Книги ---\n";
+    string article = GetStringInput("Введіть Артикул книги для видачі:");
 
     Book* book = library->FindBookByArticle(article);
+
     if (book == nullptr)
     {
-        cout << "Error: Book not found." << endl;
+        cout << "Помилка: Книгу не знайдено.\n";
     }
     else if (!book->IsAvailable())
     {
-        cout << "Error: Book is already issued to "
-            << book->GetReaderFullName() << "." << endl;
+        cout << "Помилка: Ця книга вже видана читачу "
+            << book->GetReaderFullName() << ".\n";
     }
     else
     {
-        string reader = GetStringInput("Enter Reader's Full Name:");
-        book->IssueToReader(reader); // Змінюємо стан об'єкта
-        cout << "Book issued to " << reader << "." << endl;
+        string readerName;
+
+        if (authManager->IsAdmin())
+        {
+            readerName = GetStringInput("Введіть ПІБ читача:");
+        }
+        else
+        {
+            readerName = authManager->GetCurrentUser();
+            cout << "Видача книги на ваш акаунт (" << readerName << ")...\n";
+        }
+
+        book->IssueToReader(readerName);
+        cout << "Книгу успішно видано.\n";
     }
     PressEnterToContinue();
 }
 
 void UIManager::DoReturnBook()
 {
-    cout << "\n--- Return Book ---" << endl;
-    string article = GetStringInput("Enter Article of book to return:");
+    cout << "\n--- Повернення Книги ---\n";
+    string article = GetStringInput("Введіть Артикул книги для повернення:");
 
     Book* book = library->FindBookByArticle(article);
     if (book == nullptr)
     {
-        cout << "Error: Book not found." << endl;
+        cout << "Помилка: Книгу не знайдено.\n";
     }
     else if (book->IsAvailable())
     {
-        cout << "Error: This book is already in the library." << endl;
+        cout << "Помилка: Ця книга вже знаходиться в бібліотеці.\n";
     }
     else
     {
-        cout << "Book '" << book->GetBookTitle()
-            << "' returned from " << book->GetReaderFullName() << "." << endl;
-        book->ReturnToLibrary(); // Змінюємо стан об'єкта
+        cout << "Книгу '" << book->GetBookTitle()
+            << "' повернуто від читача " << book->GetReaderFullName() << ".\n";
+        book->ReturnToLibrary();
     }
     PressEnterToContinue();
 }
 
-// --- Функції-дії (для користувачів) ---
-
 void UIManager::DoListUsers()
 {
-    cout << "\n--- List All Users ---" << endl;
-    authManager->ListUsers(); // AuthManager вже має гарний вивід
+    cout << "\n--- Список Користувачів ---\n";
+    authManager->ListUsers();
     PressEnterToContinue();
+    cout << "---------------------------\n";
 }
 
 void UIManager::DoCreateUser()
 {
-    cout << "\n--- Create New User ---" << endl;
-    string user = GetStringInput("Enter new username:");
-    string pass = GetStringInput("Enter new password:");
-    bool isAdmin = GetYesNoInput("Is this user an admin? (y/n):");
+    cout << "\n--- Створення Користувача ---\n";
+    string user = GetStringInput("Введіть новий логін:");
+    string pass = GetStringInput("Введіть новий пароль:");
+
+    bool isAdmin = false;
 
     authManager->CreateUser(user, pass, isAdmin);
     PressEnterToContinue();
@@ -507,12 +527,12 @@ void UIManager::DoCreateUser()
 
 void UIManager::DoDeleteUser()
 {
-    cout << "\n--- Delete User ---" << endl;
-    string user = GetStringInput("Enter username to delete:");
+    cout << "\n--- Видалення Користувача ---\n";
+    string user = GetStringInput("Введіть логін для видалення:");
 
     if (user == authManager->GetCurrentUser())
     {
-        cout << "Error: You cannot delete yourself." << endl;
+        cout << "Помилка: Ви не можете видалити самі себе.\n";
     }
     else
     {
@@ -521,35 +541,29 @@ void UIManager::DoDeleteUser()
     PressEnterToContinue();
 }
 
-
-// --- Допоміжні функції (Валідація вводу) ---
-
 int UIManager::GetMenuChoice(int maxOption)
 {
     int choice;
     while (true)
     {
-        cout << "Enter your choice (1-" << maxOption << "): ";
+        cout << "Ваш вибір (1-" << maxOption << "): ";
         if (cin >> choice)
         {
             if (choice >= 1 && choice <= maxOption)
             {
-                // Очищення буфера вводу
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 return choice;
             }
             else
             {
-                cout << "Invalid choice. Please enter a number "
-                    << "between 1 and " << maxOption << "." << endl;
+                cout << "Невірний вибір. Будь ласка, введіть число від 1 до "
+                    << maxOption << ".\n";
             }
         }
         else
         {
-            // Вимога 3.1: "коректність даних (формат, діапазон, тип)"
-            cout << "Invalid input. Please enter a number." << endl;
-            cin.clear(); // Скидання прапорця помилки
-            // Очищення буфера вводу
+            cout << "Некоректне введення. Введіть число.\n";
+            cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
     }
@@ -561,14 +575,14 @@ string UIManager::GetStringInput(const string& prompt)
     while (true)
     {
         cout << prompt << " ";
-        getline(cin, input); // Читаємо цілий рядок
+        getline(cin, input);
         if (!input.empty())
         {
             return input;
         }
         else
         {
-            cout << "Input cannot be empty. Please try again." << endl;
+            cout << "Введення не може бути порожнім.\n";
         }
     }
 }
@@ -578,27 +592,15 @@ int UIManager::GetIntInput(const string& prompt)
     while (true)
     {
         string input = GetStringInput(prompt);
-        // Вимога 3.2: "try-catch"
         try
         {
-            // stoi - string to integer
             int value = stoi(input);
-            if (value >= 0)
-            {
-                return value;
-            }
-            else
-            {
-                cout << "Number must be zero or positive." << endl;
-            }
+            if (value >= 0) return value;
+            else cout << "Число має бути позитивним.\n";
         }
-        catch (const invalid_argument&)
+        catch (const exception&)
         {
-            cout << "Invalid input. Please enter a valid number." << endl;
-        }
-        catch (const out_of_range&)
-        {
-            cout << "Number is too large. Please try again." << endl;
+            cout << "Некоректне введення. Введіть ціле число.\n";
         }
     }
 }
@@ -610,24 +612,13 @@ double UIManager::GetDoubleInput(const string& prompt)
         string input = GetStringInput(prompt);
         try
         {
-            // stod - string to double
             double value = stod(input);
-            if (value >= 0.0)
-            {
-                return value;
-            }
-            else
-            {
-                cout << "Number must be zero or positive." << endl;
-            }
+            if (value >= 0.0) return value;
+            else cout << "Число має бути позитивним.\n";
         }
-        catch (const invalid_argument&)
+        catch (const exception&)
         {
-            cout << "Invalid input. Please enter a valid number (e.g., 150.99)." << endl;
-        }
-        catch (const out_of_range&)
-        {
-            cout << "Number is too large. Please try again." << endl;
+            cout << "Некоректне введення. Введіть число (напр. 150.50).\n";
         }
     }
 }
@@ -639,13 +630,12 @@ bool UIManager::GetYesNoInput(const string& prompt)
         string input = GetStringInput(prompt);
         if (input == "y" || input == "Y") return true;
         if (input == "n" || input == "N") return false;
-        cout << "Please enter 'y' (yes) or 'n' (no)." << endl;
+        cout << "Будь ласка, введіть 'y' (так) або 'n' (ні).\n";
     }
 }
 
 void UIManager::PressEnterToContinue()
 {
-    cout << "\nPress Enter to continue..." << flush;
-    // Цей трюк очищує буфер вводу перед тим, як чекати
+    cout << "\nНатисніть Enter щоб продовжити..." << flush;
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }

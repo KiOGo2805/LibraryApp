@@ -1,9 +1,7 @@
 #pragma once
 
-/*
- * Цей файл оголошує клас AdminUser.
- * Це конкретний клас-нащадок від BaseUser для адміністратора.
- */
+// Цей файл оголошує клас AdminUser.
+// Це конкретний клас-нащадок від BaseUser для адміністратора.
 
 #include "BaseUser.h"
 
@@ -24,7 +22,6 @@ public:
      */
     AdminUser(const std::string& username, const std::string& password);
 
-    // --- Реалізація віртуальних методів ---
 
     std::string GetUsername() const override;
     bool CheckPassword(const std::string& password) const override;
