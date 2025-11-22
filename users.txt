@@ -1,1 +1,2 @@
 Admin:admin:admin123
+User:stepan:12345
