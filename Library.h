@@ -17,6 +17,9 @@
   */
 class Library
 {
+private:
+    std::vector<Book> books;
+    std::string dataFilePath;
 public:
     /**
      * @brief Конструктор.
@@ -108,8 +111,5 @@ private:
      * Викликається деструктором.
      */
     void SaveToFile();
-
-    std::vector<Book> books;
-    std::string dataFilePath;
 };
 

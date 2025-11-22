@@ -4,6 +4,7 @@
 // Це конкретний клас-нащадок від BaseUser для адміністратора.
 
 #include "BaseUser.h"
+#include <string>
 
  /**
   * @class AdminUser
@@ -14,6 +15,10 @@
   */
 class AdminUser : public BaseUser
 {
+private:
+    std::string username;
+    std::string password;
+
 public:
     /**
      * @brief Конструктор.
@@ -22,14 +27,9 @@ public:
      */
     AdminUser(const std::string& username, const std::string& password);
 
-
     std::string GetUsername() const override;
     bool CheckPassword(const std::string& password) const override;
     std::string GetUserType() const override;
     std::string ToFileString() const override;
     bool IsAdmin() const override;
-
-private:
-    std::string username;
-    std::string password;
 };

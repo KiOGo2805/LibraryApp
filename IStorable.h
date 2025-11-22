@@ -6,7 +6,7 @@
  * які можна зберігати у базі даних (наприклад, у класі Library).
  */
 
-#include <string> // Для використання std::string
+#include <string>
 
  /**
   * @class IStorable
@@ -38,10 +38,4 @@ public:
      * @return Рядок std::string (наприклад, "Book").
      */
     virtual std::string GetTypeName() const = 0;
-
-    // Згідно з Addendum A (1.3), далі йдуть protected та private
-protected:
-    // Немає захищених членів
-
-private:
 };

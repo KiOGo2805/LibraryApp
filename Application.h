@@ -18,6 +18,11 @@
   */
 class Application
 {
+private:
+    Library library;
+    AuthManager authManager;
+    UIManager uiManager;
+
 public:
     /**
      * @brief Конструктор.
@@ -35,11 +40,4 @@ public:
      * Це основна точка входу в логіку програми.
      */
     void Run();
-
-private:
-    Library library;
-
-    AuthManager authManager;
-
-    UIManager uiManager;
 };

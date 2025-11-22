@@ -15,6 +15,10 @@
   */
 class StandardUser : public BaseUser
 {
+private:
+    std::string username;
+    std::string password;
+
 public:
     /**
      * @brief Конструктор.
@@ -28,8 +32,4 @@ public:
     std::string GetUserType() const override;
     std::string ToFileString() const override;
     bool IsAdmin() const override;
-
-private:
-    std::string username;
-    std::string password;
 };

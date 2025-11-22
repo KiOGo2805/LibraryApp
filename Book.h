@@ -21,6 +21,14 @@ using namespace std;
  */
 class Book : public IStorable
 {
+private:
+    string article;
+    string authorName;
+    string bookTitle;
+    double price;
+    int shelfNumber;
+    string readerFullName;
+
 public:
     /**
      * @brief Конструктор за замовчуванням.
@@ -50,6 +58,17 @@ public:
      * @param other Інший об'єкт Book для копіювання.
      */
     Book(const Book& other);
+
+    /**
+     * @brief Конструктор переміщення (Move Constructor).
+     * Вимога 2.3.
+     */
+    Book(Book&& other) noexcept;
+
+    /**
+     * @brief Оператор присвоєння з переміщенням (Move Assignment).
+     */
+    Book& operator=(Book&& other) noexcept;
 
     /**
      * @brief Деструктор (з повідомленням, вимога 2.3).
@@ -120,14 +139,4 @@ public:
      * @return Посилання на цей об'єкт (*this).
      */
     Book& operator=(const Book& other);
-
-protected:
-
-private:
-    string article;
-    string authorName;
-    string bookTitle;
-    double price;
-    int shelfNumber;
-    string readerFullName;
 };

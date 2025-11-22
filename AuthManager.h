@@ -18,6 +18,11 @@
   */
 class AuthManager
 {
+private:
+    std::string usersFilePath;
+    std::map<std::string, std::unique_ptr<BaseUser>> users;
+    BaseUser* currentUser;
+
 public:
     /**
      * @brief Конструктор.
@@ -33,7 +38,6 @@ public:
 
     AuthManager(const AuthManager&) = delete;
     AuthManager& operator=(const AuthManager&) = delete;
-
 
     /**
      * @brief Спроба входу в систему.
@@ -101,10 +105,4 @@ private:
      * @brief Зберігає поточну базу користувачів у файл.
      */
     void SaveUsers() const;
-
-    std::string usersFilePath;
-
-    std::map<std::string, std::unique_ptr<BaseUser>> users;
-
-    BaseUser* currentUser;
 };

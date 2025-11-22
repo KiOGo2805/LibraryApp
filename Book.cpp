@@ -42,11 +42,41 @@ Book::Book(const Book& other)
 {
 }
 
+Book::Book(Book&& other) noexcept
+    : article(std::move(other.article)),
+    authorName(std::move(other.authorName)),
+    bookTitle(std::move(other.bookTitle)),
+    price(other.price),
+    shelfNumber(other.shelfNumber),
+    readerFullName(std::move(other.readerFullName))
+{
+    other.price = 0.0;
+    other.shelfNumber = 0;
+}
+
+Book& Book::operator=(Book&& other) noexcept
+{
+    if (this == &other)
+        return *this;
+
+    this->article = std::move(other.article);
+    this->authorName = std::move(other.authorName);
+    this->bookTitle = std::move(other.bookTitle);
+    this->price = other.price;
+    this->shelfNumber = other.shelfNumber;
+    this->readerFullName = std::move(other.readerFullName);
+
+    other.price = 0.0;
+    other.shelfNumber = 0;
+
+    return *this;
+}
+
 Book::~Book()
 {
-    cout << "Об'єкт книги '" << this->bookTitle
-        << "' (Арт: " << this->article
-        << ") знищується.\n";
+    //cout << "Об'єкт книги '" << this->bookTitle
+    //    << "' (Арт: " << this->article
+    //    << ") знищується.\n";
 }
 
 void Book::SetArticle(const string& article)
