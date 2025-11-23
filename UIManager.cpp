@@ -408,6 +408,7 @@ void UIManager::DoUpdateBook()
     {
         cout << "Помилка: Невірний формат числа. Оновлення скасовано.\n";
     }
+    PressEnterToContinue();
 }
 
 void UIManager::DoDeleteBook()
