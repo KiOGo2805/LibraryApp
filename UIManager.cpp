@@ -351,6 +351,8 @@ void UIManager::DoUpdateBook()
 {
     cout << "\n--- Оновлення Книги ---\n";
 
+    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
     cout << "Введіть Артикул книги для оновлення: ";
     string article;
     getline(cin, article);
