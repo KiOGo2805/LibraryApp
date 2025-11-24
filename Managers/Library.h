@@ -1,9 +1,4 @@
 #pragma once
-
-// Цей файл оголошує клас Library.
-// Library — це менеджер-клас, який керує колекцією об'єктів Book,
-// відповідає за їх завантаження, збереження та маніпуляції.
-
 #include "../Entities/Book.h"
 #include <vector>
 #include <string>

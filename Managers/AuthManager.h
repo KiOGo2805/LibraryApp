@@ -1,9 +1,4 @@
 #pragma once
-
-// Цей файл оголошує клас AuthManager.
-// AuthManager відповідає за автентифікацію, авторизацію
-// та управління обліковими записами користувачів.
-
 #include "../Entities/BaseUser.h"
 #include <string>
 #include <map>

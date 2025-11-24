@@ -1,8 +1,4 @@
 #pragma once
-
-// Цей файл оголошує клас AdminUser.
-// Це конкретний клас-нащадок від BaseUser для адміністратора.
-
 #include "BaseUser.h"
 #include <string>
 

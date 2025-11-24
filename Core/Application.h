@@ -1,10 +1,4 @@
 #pragma once
-
-// Цей файл оголошує клас Application.
-// Application - це головний клас програми, який "володіє"
-// всіма основними менеджерами (Library, AuthManager)
-// та керує головним циклом програми.
-
 #include "../Managers/Library.h"
 #include "../Managers/AuthManager.h"
 #include "../Managers/UIManager.h"

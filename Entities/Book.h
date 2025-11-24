@@ -1,11 +1,4 @@
 #pragma once
-
-/**
- * Цей файл оголошує клас Book.
- * Book представляє сутність "книга" у бібліотеці, містить її дані
- * та реалізує інтерфейс IStorable.
- */
-
 #include "IStorable.h"
 #include <string>
 #include <iostream>

@@ -1,9 +1,4 @@
 #pragma once
-
-// Цей файл оголошує абстрактний клас BaseUser.
-// BaseUser є базовим для всіх типів користувачів у системі
-// (наприклад, StandardUser, AdminUser).
-
 #include <string>
 
  /**

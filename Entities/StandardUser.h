@@ -1,8 +1,4 @@
 #pragma once
-
-// Цей файл оголошує клас StandardUser.
-// Це конкретний клас-нащадок від BaseUser для звичайного користувача.
-
 #include "BaseUser.h"
 #include <string>
 
