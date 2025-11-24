@@ -100,6 +100,9 @@ private:
      */
     void PressEnterToContinue();
 
+    class Book* PromptAndFindBook(const std::string& headerTitle);
+    std::string GetValidNewArticle();
+
     void DoAddBook();
     void DoListAllBooks();
     void DoFindBookByArticle();

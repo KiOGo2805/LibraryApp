@@ -725,4 +725,6 @@ void UIManager::PressEnterToContinue()
 {
     cout << "\nНатисніть Enter щоб продовжити..." << flush;
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+     system("cls");
 }
