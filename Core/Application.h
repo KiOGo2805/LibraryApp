@@ -5,9 +5,9 @@
 // всіма основними менеджерами (Library, AuthManager)
 // та керує головним циклом програми.
 
-#include "Library.h"
-#include "AuthManager.h"
-#include "UIManager.h"
+#include "../Managers/Library.h"
+#include "../Managers/AuthManager.h"
+#include "../Managers/UIManager.h"
 
  /**
   * @class Application

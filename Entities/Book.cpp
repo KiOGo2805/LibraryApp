@@ -5,12 +5,22 @@
 
 using namespace std;
 
+namespace
+{
+    const string DEFAULT_ARTICLE = "N/A";
+    const string DEFAULT_AUTHOR = "Unknown";
+    const string DEFAULT_TITLE = "Untitled";
+    const double DEFAULT_PRICE = 0.0;
+    const int DEFAULT_SHELF = 0;
+    const string MOVE_MARKER = "MOVED";
+}
+
 Book::Book()
-    : article("N/A"),
-    authorName("Unknown"),
-    bookTitle("Untitled"),
-    price(0.0),
-    shelfNumber(0),
+    : article(DEFAULT_ARTICLE),
+    authorName(DEFAULT_AUTHOR),
+    bookTitle(DEFAULT_TITLE),
+    price(DEFAULT_PRICE),
+    shelfNumber(DEFAULT_SHELF),
     readerFullName("")
 {
 }
@@ -50,8 +60,9 @@ Book::Book(Book&& other) noexcept
     shelfNumber(other.shelfNumber),
     readerFullName(std::move(other.readerFullName))
 {
-    other.price = 0.0;
-    other.shelfNumber = 0;
+    other.price = DEFAULT_PRICE;
+    other.shelfNumber = DEFAULT_SHELF;
+    other.article = MOVE_MARKER;
 }
 
 Book& Book::operator=(Book&& other) noexcept
@@ -66,17 +77,21 @@ Book& Book::operator=(Book&& other) noexcept
     this->shelfNumber = other.shelfNumber;
     this->readerFullName = std::move(other.readerFullName);
 
-    other.price = 0.0;
-    other.shelfNumber = 0;
+    other.price = DEFAULT_PRICE;
+    other.shelfNumber = DEFAULT_SHELF;
+    other.article = MOVE_MARKER;
 
     return *this;
 }
 
 Book::~Book()
 {
-    //cout << "Об'єкт книги '" << this->bookTitle
-    //    << "' (Арт: " << this->article
-    //    << ") знищується.\n";
+    //if (this->article != MOVE_MARKER)
+    //{
+    //    cout << "Об'єкт книги '" << this->bookTitle
+    //        << "' (Арт: " << this->article
+    //        << ") знищується.\n";
+    //}
 }
 
 void Book::SetArticle(const string& article)

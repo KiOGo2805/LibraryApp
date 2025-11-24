@@ -1,6 +1,6 @@
 #include "AuthManager.h"
-#include "StandardUser.h"
-#include "AdminUser.h"
+#include "../Entities/StandardUser.h"
+#include "../Entities/AdminUser.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>

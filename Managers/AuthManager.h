@@ -4,7 +4,7 @@
 // AuthManager відповідає за автентифікацію, авторизацію
 // та управління обліковими записами користувачів.
 
-#include "BaseUser.h"
+#include "../Entities/BaseUser.h"
 #include <string>
 #include <map>
 #include <memory>

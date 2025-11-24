@@ -5,8 +5,17 @@
 #include <string>
 #include <limits>
 #include <stdexcept>
+#include <algorithm>
 
 using namespace std;
+
+namespace
+{
+    const int LOGIN_MENU_COUNT = 2;
+    const int ADMIN_MAIN_MENU_COUNT = 12;
+    const int USER_MAIN_MENU_COUNT = 8;
+    const int ADMIN_USER_MENU_COUNT = 4;
+}
 
 UIManager::UIManager(Library* library, AuthManager* authManager)
     : library(library), authManager(authManager)
@@ -48,7 +57,7 @@ bool UIManager::HandleLogin()
         cout << "\n--- Вхід до Системи ---\n";
         cout << "1. Увійти\n";
         cout << "2. Вийти\n";
-        int choice = GetMenuChoice(2);
+        int choice = GetMenuChoice(LOGIN_MENU_COUNT);
 
         if (choice == 2)
         {
@@ -99,7 +108,7 @@ void UIManager::ShowAdminMainMenu()
         cout << "11. Допомога\n";
         cout << "12. Вийти з акаунту\n";
 
-        int choice = GetMenuChoice(12);
+        int choice = GetMenuChoice(ADMIN_MAIN_MENU_COUNT);
 
         switch (choice)
         {
@@ -138,7 +147,7 @@ void UIManager::ShowUserMainMenu()
         cout << "7. Допомога\n";
         cout << "8. Вийти з акаунту\n";
 
-        int choice = GetMenuChoice(8);
+        int choice = GetMenuChoice(USER_MAIN_MENU_COUNT);
 
         switch (choice)
         {
@@ -168,7 +177,7 @@ void UIManager::ShowAdminMenu()
         cout << "3. Видалити користувача\n";
         cout << "4. Назад до Головного Меню\n";
 
-        int choice = GetMenuChoice(4);
+        int choice = GetMenuChoice(ADMIN_USER_MENU_COUNT);
 
         switch (choice)
         {
@@ -203,9 +212,10 @@ void UIManager::ShowHelpScreen()
     if (authManager->IsAdmin())
     {
         cout << "\n== Правила вводу даних (Тільки Адмін) ==\n";
-        cout << "- Поля не можуть бути порожніми.\n";
-        cout << "- Артикул має бути унікальним.\n";
-        cout << "- Ціна та номер полиці мають бути позитивними числами.\n";
+        cout << "- Артикул: макс. 6 символів, латиниця/цифри, без пробілів.\n";
+        cout << "- Назва/Автор: макс. 16 символів.\n";
+        cout << "- Полиця: макс. 5 цифр.\n";
+        cout << "- Ціна: число, більше 0.\n";
 
         cout << "\n== Команди Адміністратора ==\n";
         cout << "Додати/Оновити/Видалити книгу: "
@@ -239,18 +249,79 @@ void UIManager::DoAddBook()
     cout << "\n--- Додавання Нової Книги ---\n";
     try
     {
-        string article = GetStringInput("Введіть Артикул (унікальний):");
-        if (library->FindBookByArticle(article) != nullptr)
+        string article;
+        while (true)
         {
-            cout << "Помилка: Книга з таким артикулом вже існує.\n";
-            PressEnterToContinue();
-            return;
+            article = GetStringInput("Введіть Артикул:");
+
+            if (article.length() > 6)
+            {
+                cout << "Помилка: Максимум 6 символів.\n";
+                continue;
+            }
+
+            bool isValidChars = true;
+            for (char c : article)
+            {
+                if (c < 0 || c > 127 || isspace(c))
+                {
+                    isValidChars = false;
+                    break;
+                }
+            }
+
+            if (!isValidChars)
+            {
+                cout << "Помилка: Артикул має містити лише латинські літери та цифри (без пробілів).\n";
+                continue;
+            }
+
+            if (library->FindBookByArticle(article) != nullptr)
+            {
+                cout << "Помилка: Книга з таким артикулом вже існує.\n";
+                continue;
+            }
+
+            break;
         }
 
-        string title = GetStringInput("Введіть Назву:");
-        string author = GetStringInput("Введіть Автора:");
+        string title;
+        while (true)
+        {
+            title = GetStringInput("Введіть назву:");
+            if (title.length() > 16)
+            {
+                cout << "Помилка: Максимум 16 символів.\n";
+                continue;
+            }
+            break;
+        }
+
+        string author;
+        while (true)
+        {
+            author = GetStringInput("Введіть автора:");
+            if (author.length() > 16)
+            {
+                cout << "Помилка: Максимум 16 символів.\n";
+                continue;
+            }
+            break;
+        }
+
         double price = GetDoubleInput("Введіть Ціну (грн):");
-        int shelf = GetIntInput("Введіть Номер Полиці:");
+
+        int shelf;
+        while (true)
+        {
+            shelf = GetIntInput("Введіть номер полиці:");
+            if (shelf > 99999)
+            {
+                cout << "Помилка: Максимум 5 символів.\n";
+                continue;
+            }
+            break;
+        }
 
         Book newBook(article, author, title, price, shelf);
         if (library->AddBook(newBook))
@@ -387,7 +458,10 @@ void UIManager::DoUpdateBook()
         getline(cin, input);
         if (!input.empty())
         {
-            double newPrice = stod(input);
+            size_t pos;
+            double newPrice = stod(input, &pos);
+            if (pos != input.length()) throw invalid_argument("Chars after number");
+
             if (newPrice >= 0) updatedData.SetPrice(newPrice);
             else cout << "Попередження: Ціна не може бути від'ємною. Залишено старе значення.\n";
         }
@@ -396,9 +470,12 @@ void UIManager::DoUpdateBook()
         getline(cin, input);
         if (!input.empty())
         {
-            int newShelf = stoi(input);
+            size_t pos;
+            int newShelf = stoi(input, &pos);
+            if (pos != input.length()) throw invalid_argument("Chars after number");
+
             if (newShelf >= 0) updatedData.SetShelfNumber(newShelf);
-            else cout << "Попередження: Номер полиці має бути позитивним. Залишено старе значення.\n";
+            else cout << "Попередження: Номер полиці не може бути від'ємним. Залишено старе значення.\n";
         }
 
         if (library->UpdateBook(article, updatedData))
@@ -592,9 +669,15 @@ int UIManager::GetIntInput(const string& prompt)
         string input = GetStringInput(prompt);
         try
         {
-            int value = stoi(input);
+            size_t pos;
+            int value = stoi(input, &pos);
+            if (pos != input.length())
+            {
+                throw invalid_argument("Trailing characters");
+            }
+
             if (value >= 0) return value;
-            else cout << "Число має бути позитивним.\n";
+            else cout << "Число має бути більше 0.\n";
         }
         catch (const exception&)
         {
@@ -610,13 +693,19 @@ double UIManager::GetDoubleInput(const string& prompt)
         string input = GetStringInput(prompt);
         try
         {
-            double value = stod(input);
+            size_t pos;
+            double value = stod(input, &pos);
+            if (pos != input.length())
+            {
+                throw invalid_argument("Trailing characters");
+            }
+
             if (value >= 0.0) return value;
-            else cout << "Число має бути позитивним.\n";
+            else cout << "Число має бути більше 0.\n";
         }
         catch (const exception&)
         {
-            cout << "Некоректне введення. Введіть число (напр. 150.50).\n";
+            cout << "Некоректне введення. Введіть число.\n";
         }
     }
 }

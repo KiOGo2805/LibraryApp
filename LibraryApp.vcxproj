@@ -102,6 +102,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -123,27 +124,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AdminUser.cpp" />
-    <ClCompile Include="Application.cpp" />
-    <ClCompile Include="AuthManager.cpp" />
-    <ClCompile Include="BaseUser.cpp" />
-    <ClCompile Include="Book.cpp" />
-    <ClCompile Include="IStorable.cpp" />
-    <ClCompile Include="Library.cpp" />
-    <ClCompile Include="LibraryApp.cpp" />
-    <ClCompile Include="StandardUser.cpp" />
-    <ClCompile Include="UIManager.cpp" />
+    <ClCompile Include="Core\Application.cpp" />
+    <ClCompile Include="Core\Main.cpp" />
+    <ClCompile Include="Entities\AdminUser.cpp" />
+    <ClCompile Include="Entities\Book.cpp" />
+    <ClCompile Include="Entities\StandardUser.cpp" />
+    <ClCompile Include="Managers\AuthManager.cpp" />
+    <ClCompile Include="Managers\Library.cpp" />
+    <ClCompile Include="Managers\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AdminUser.h" />
-    <ClInclude Include="Application.h" />
-    <ClInclude Include="AuthManager.h" />
-    <ClInclude Include="BaseUser.h" />
-    <ClInclude Include="Book.h" />
-    <ClInclude Include="IStorable.h" />
-    <ClInclude Include="Library.h" />
-    <ClInclude Include="StandardUser.h" />
-    <ClInclude Include="UIManager.h" />
+    <ClInclude Include="Core\Application.h" />
+    <ClInclude Include="Entities\AdminUser.h" />
+    <ClInclude Include="Entities\BaseUser.h" />
+    <ClInclude Include="Entities\Book.h" />
+    <ClInclude Include="Entities\IStorable.h" />
+    <ClInclude Include="Entities\StandardUser.h" />
+    <ClInclude Include="Managers\AuthManager.h" />
+    <ClInclude Include="Managers\Library.h" />
+    <ClInclude Include="Managers\UIManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -15,63 +15,57 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LibraryApp.cpp">
+    <ClCompile Include="Core\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IStorable.cpp">
+    <ClCompile Include="Entities\AdminUser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Book.cpp">
+    <ClCompile Include="Entities\Book.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Library.cpp">
+    <ClCompile Include="Entities\StandardUser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AuthManager.cpp">
+    <ClCompile Include="Managers\AuthManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Application.cpp">
+    <ClCompile Include="Managers\Library.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BaseUser.cpp">
+    <ClCompile Include="Managers\UIManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StandardUser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AdminUser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UIManager.cpp">
+    <ClCompile Include="Core\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="IStorable.h">
+    <ClInclude Include="Managers\AuthManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Book.h">
+    <ClInclude Include="Managers\Library.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Library.h">
+    <ClInclude Include="Managers\UIManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AuthManager.h">
+    <ClInclude Include="Entities\AdminUser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Application.h">
+    <ClInclude Include="Entities\BaseUser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BaseUser.h">
+    <ClInclude Include="Entities\Book.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StandardUser.h">
+    <ClInclude Include="Entities\IStorable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AdminUser.h">
+    <ClInclude Include="Entities\StandardUser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UIManager.h">
+    <ClInclude Include="Core\Application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

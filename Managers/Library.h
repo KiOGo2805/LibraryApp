@@ -4,7 +4,7 @@
 // Library — це менеджер-клас, який керує колекцією об'єктів Book,
 // відповідає за їх завантаження, збереження та маніпуляції.
 
-#include "Book.h"
+#include "../Entities/Book.h"
 #include <vector>
 #include <string>
 
