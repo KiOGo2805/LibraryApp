@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 
+using namespace std;
+
  /**
   * @class BaseUser
   * @brief Абстрактний базовий клас для користувача системи.
@@ -18,28 +20,28 @@ public:
 
     /**
      * @brief Отримує логін користувача.
-     * @return Логін як std::string.
+     * @return Логін як string.
      */
-    virtual std::string GetUsername() const = 0;
+    virtual string GetUsername() const = 0;
 
     /**
      * @brief Перевіряє, чи наданий пароль є вірним.
      * @param password Пароль для перевірки.
      * @return true, якщо пароль вірний, інакше false.
      */
-    virtual bool CheckPassword(const std::string& password) const = 0;
+    virtual bool CheckPassword(const string& password) const = 0;
 
     /**
      * @brief Отримує назву типу користувача (напр., "Admin" або "Standard").
-     * @return Назва типу як std::string.
+     * @return Назва типу як string.
      */
-    virtual std::string GetUserType() const = 0;
+    virtual string GetUserType() const = 0;
 
     /**
      * @brief Отримує рядок для збереження у файл (CSV-подібний).
      * @return Рядок для файлу.
      */
-    virtual std::string ToFileString() const = 0;
+    virtual string ToFileString() const = 0;
 
     /**
      * @brief Перевіряє, чи має користувач права адміністратора.

@@ -3,6 +3,8 @@
 #include <vector>
 #include <string>
 
+using namespace std;
+
  /**
   * @class Library
   * @brief Менеджер-клас для управління базою даних книг.
@@ -13,14 +15,14 @@
 class Library
 {
 private:
-    std::vector<Book> books;
-    std::string dataFilePath;
+    vector<Book> books;
+    string dataFilePath;
 public:
     /**
      * @brief Конструктор.
      * @param dataFilePath Шлях до файлу даних (напр., "db.csv").
      */
-    Library(const std::string& dataFilePath);
+    Library(const string& dataFilePath);
 
     /**
      * @brief Деструктор.
@@ -40,7 +42,7 @@ public:
      * @param article Артикул книги для видалення.
      * @return true, якщо видалення успішне, false - якщо книга не знайдена.
      */
-    bool DeleteBook(const std::string& article);
+    bool DeleteBook(const string& article);
 
     /**
      * @brief Оновлює дані існуючої книги.
@@ -48,35 +50,35 @@ public:
      * @param newBookData Об'єкт Book з новими даними.
      * @return true, якщо оновлення успішне, false - якщо книга не знайдена.
      */
-    bool UpdateBook(const std::string& article, const Book& newBookData);
+    bool UpdateBook(const string& article, const Book& newBookData);
 
     /**
      * @brief Знаходить книгу за артикулом.
      * @param article Артикул для пошуку.
      * @return Вказівник на знайдену книгу, або nullptr, якщо не знайдено.
      */
-    Book* FindBookByArticle(const std::string& article);
+    Book* FindBookByArticle(const string& article);
 
     /**
      * @brief Знаходить книгу за артикулом (const-версія).
      * @param article Артикул для пошуку.
      * @return Вказівник на константну книгу, або nullptr.
      */
-    const Book* FindBookByArticle(const std::string& article) const;
+    const Book* FindBookByArticle(const string& article) const;
 
     /**
      * @brief Формує список книг за ім'ям автора.
      * @param authorName Ім'я автора для фільтрації.
      * @return std::vector<Book>, що містить лише відповідні книги.
      */
-    std::vector<Book> FilterByAuthor(const std::string& authorName) const;
+    vector<Book> FilterByAuthor(const string& authorName) const;
 
     /**
      * @brief Формує список книг за номером етажерки.
      * @param shelfNumber Номер етажерки для фільтрації.
      * @return std::vector<Book>, що містить лише відповідні книги.
      */
-    std::vector<Book> FilterByShelf(int shelfNumber) const;
+    vector<Book> FilterByShelf(int shelfNumber) const;
 
     void SortByTitle();
     void SortByAuthor();
@@ -86,7 +88,7 @@ public:
      * @brief Отримує посилання на повний список книг.
      * @return Константне посилання на std::vector<Book>.
      */
-    const std::vector<Book>& GetAllBooks() const;
+    const vector<Book>& GetAllBooks() const;
 
     /**
      * @brief Перевіряє, чи порожня бібліотека.

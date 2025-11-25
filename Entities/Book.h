@@ -76,7 +76,7 @@ public:
 
     /**
      * @brief Отримує артикул книги.
-     * @return Артикул як std::string.
+     * @return Артикул як string.
      */
     string GetArticle() const;
 
@@ -122,7 +122,7 @@ public:
 
     /**
      * @brief Конвертує дані книги в рядок формату CSV.
-     * @return Рядок std::string у форматі CSV.
+     * @return Рядок string у форматі CSV.
      */
     string ToCsvString() const;
 

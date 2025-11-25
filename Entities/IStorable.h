@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 
+using namespace std;
+
  /**
   * @class IStorable
   * @brief Абстрактний базовий клас (інтерфейс) для об'єктів,
@@ -22,13 +24,13 @@ public:
 
     /**
      * @brief Отримує унікальний ідентифікатор об'єкта (артикул).
-     * @return Рядок std::string, що містить ID.
+     * @return Рядок string, що містить ID.
      */
-    virtual std::string GetId() const = 0;
+    virtual string GetId() const = 0;
 
     /**
      * @brief Отримує назву типу об'єкта.
-     * @return Рядок std::string (наприклад, "Book").
+     * @return Рядок string (наприклад, "Book").
      */
-    virtual std::string GetTypeName() const = 0;
+    virtual string GetTypeName() const = 0;
 };

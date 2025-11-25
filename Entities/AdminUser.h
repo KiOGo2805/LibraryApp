@@ -2,6 +2,8 @@
 #include "BaseUser.h"
 #include <string>
 
+using namespace std;
+
  /**
   * @class AdminUser
   * @brief Клас для користувача-адміністратора.
@@ -12,8 +14,8 @@
 class AdminUser : public BaseUser
 {
 private:
-    std::string username;
-    std::string password;
+    string username;
+    string password;
 
 public:
     /**
@@ -21,11 +23,11 @@ public:
      * @param username Логін.
      * @param password Пароль.
      */
-    AdminUser(const std::string& username, const std::string& password);
+    AdminUser(const string& username, const string& password);
 
-    std::string GetUsername() const override;
-    bool CheckPassword(const std::string& password) const override;
-    std::string GetUserType() const override;
-    std::string ToFileString() const override;
+    string GetUsername() const override;
+    bool CheckPassword(const string& password) const override;
+    string GetUserType() const override;
+    string ToFileString() const override;
     bool IsAdmin() const override;
 };

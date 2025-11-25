@@ -3,6 +3,8 @@
 #include "../Managers/AuthManager.h"
 #include "../Managers/UIManager.h"
 
+using namespace std;
+
  /**
   * @class Application
   * @brief Головний клас програми, що все об'єднує.

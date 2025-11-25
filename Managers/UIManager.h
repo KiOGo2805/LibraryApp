@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 
+using namespace std;
+
 class Library;
 class AuthManager;
 
@@ -66,28 +68,28 @@ private:
      * @param prompt Повідомлення для користувача.
      * @return Введений рядок.
      */
-    std::string GetStringInput(const std::string& prompt);
+    string GetStringInput(const string& prompt);
 
     /**
      * @brief Отримує ціле число від користувача.
      * @param prompt Повідомлення для користувача.
      * @return Введене число.
      */
-    int GetIntInput(const std::string& prompt);
+    int GetIntInput(const string& prompt);
 
     /**
      * @brief Отримує число з плаваючою комою.
      * @param prompt Повідомлення для користувача.
      * @return Введене число.
      */
-    double GetDoubleInput(const std::string& prompt);
+    double GetDoubleInput(const string& prompt);
 
     /**
      * @brief Отримує відповідь Так/Ні.
      * @param prompt Повідомлення для користувача.
      * @return true, якщо 'y', false - якщо 'n'.
      */
-    bool GetYesNoInput(const std::string& prompt);
+    bool GetYesNoInput(const string& prompt);
 
     /**
      * @brief Очікує натискання Enter від користувача та очищує екран.
@@ -99,13 +101,13 @@ private:
      * @param actionName Назва поточної дії (для заголовка).
      * @return Вказівник на книгу або nullptr, якщо не знайдено/скасовано.
      */
-    class Book* PromptAndFindBook(const std::string& actionName);
+    class Book* PromptAndFindBook(const string& actionName);
 
     /**
      * @brief Отримує та валідує новий артикул (унікальність, формат).
      * @return Коректний артикул або порожній рядок (скасування).
      */
-    std::string GetValidNewArticle();
+    string GetValidNewArticle();
 
     /**
      * @brief Виконує сценарій додавання нової книги.

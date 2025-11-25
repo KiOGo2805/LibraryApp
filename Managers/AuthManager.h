@@ -4,18 +4,20 @@
 #include <map>
 #include <memory>
 
+using namespace std;
+
  /**
   * @class AuthManager
   * @brief Керує всіма аспектами облікових записів користувачів.
   *
-  * Використовує std::map для зберігання об'єктів-нащадків BaseUser
-  * за допомогою розумних вказівників std::unique_ptr.
+  * Використовує map для зберігання об'єктів-нащадків BaseUser
+  * за допомогою розумних вказівників unique_ptr.
   */
 class AuthManager
 {
 private:
-    std::string usersFilePath;
-    std::map<std::string, std::unique_ptr<BaseUser>> users;
+    string usersFilePath;
+    map<string, unique_ptr<BaseUser>> users;
     BaseUser* currentUser;
 
 public:
@@ -23,11 +25,11 @@ public:
      * @brief Конструктор.
      * @param usersFilePath Шлях до файлу користувачів (напр., "users.txt").
      */
-    AuthManager(const std::string& usersFilePath);
+    AuthManager(const string& usersFilePath);
 
     /**
      * @brief Деструктор.
-     * Необхідний для коректного видалення std::unique_ptr.
+     * Необхідний для коректного видалення unique_ptr.
      */
     ~AuthManager();
 
@@ -40,7 +42,7 @@ public:
      * @param password Пароль користувача.
      * @return true, якщо логін та пароль вірні, інакше false.
      */
-    bool Login(const std::string& username, const std::string& password);
+    bool Login(const string& username, const string& password);
 
     /**
      * @brief Вихід із системи.
@@ -63,7 +65,7 @@ public:
      * @brief Отримує ім'я поточного користувача.
      * @return Логін поточного користувача або порожній рядок.
      */
-    std::string GetCurrentUser() const;
+    string GetCurrentUser() const;
 
     /**
      * @brief Створює нового користувача (тільки для адміна).
@@ -73,8 +75,8 @@ public:
      * @return true, якщо успішно, false - якщо користувач існує або немає прав.
      */
     bool CreateUser(
-        const std::string& username,
-        const std::string& password,
+        const string& username,
+        const string& password,
         bool isAdmin
     );
 
@@ -83,7 +85,7 @@ public:
      * @param username Логін користувача для видалення.
      * @return true, якщо успішно, false - якщо користувач не знайдений або немає прав.
      */
-    bool DeleteUser(const std::string& username);
+    bool DeleteUser(const string& username);
 
     /**
      * @brief Показує список всіх зареєстрованих користувачів (тільки для адміна).
