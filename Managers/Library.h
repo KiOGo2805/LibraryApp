@@ -60,7 +60,7 @@ public:
     Book* FindBookByArticle(const string& article);
 
     /**
-     * @brief Знаходить книгу за артикулом (const-версія).
+     * @brief Знаходить книгу за артикулом.
      * @param article Артикул для пошуку.
      * @return Вказівник на константну книгу, або nullptr.
      */
@@ -69,7 +69,7 @@ public:
     /**
      * @brief Формує список книг за ім'ям автора.
      * @param authorName Ім'я автора для фільтрації.
-     * @return std::vector<Book>, що містить лише відповідні книги.
+     * @return vector<Book>, що містить лише відповідні книги.
      */
     vector<Book> FilterByAuthor(const string& authorName) const;
 
@@ -86,7 +86,7 @@ public:
 
     /**
      * @brief Отримує посилання на повний список книг.
-     * @return Константне посилання на std::vector<Book>.
+     * @return Константне посилання на vector<Book>.
      */
     const vector<Book>& GetAllBooks() const;
 
@@ -98,13 +98,13 @@ public:
 
 private:
     /**
-     * @brief Завантажує дані з файлу (вимога 4.1).
+     * @brief Завантажує дані з файлу.
      * Викликається конструктором.
      */
     void LoadFromFile();
 
     /**
-     * @brief Зберігає дані у файл (вимога 4.2).
+     * @brief Зберігає дані у файл.
      * Викликається деструктором.
      */
     void SaveToFile();

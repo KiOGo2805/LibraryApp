@@ -47,14 +47,13 @@ public:
     );
 
     /**
-     * @brief Конструктор копіювання (вимога 2.3).
+     * @brief Конструктор копіювання.
      * @param other Інший об'єкт Book для копіювання.
      */
     Book(const Book& other);
 
     /**
      * @brief Конструктор переміщення (Move Constructor).
-     * Вимога 2.3.
      */
     Book(Book&& other) noexcept;
 
@@ -64,7 +63,7 @@ public:
     Book& operator=(Book&& other) noexcept;
 
     /**
-     * @brief Деструктор (з повідомленням, вимога 2.3).
+     * @brief Деструктор.
      */
     ~Book();
 
@@ -127,7 +126,7 @@ public:
     string ToCsvString() const;
 
     /**
-     * @brief Копіювальний оператор присвоєння (вимога 2.3).
+     * @brief Копіювальний оператор присвоєння.
      * @param other Інший об'єкт Book для копіювання.
      * @return Посилання на цей об'єкт (*this).
      */
