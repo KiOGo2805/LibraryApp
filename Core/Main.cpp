@@ -3,6 +3,8 @@
 #include <exception>
 #include <Windows.h>
 
+using namespace std;
+
 int main()
 {
     SetConsoleCP(1251);
@@ -15,12 +17,12 @@ int main()
     }
     catch (const std::exception& e)
     {
-        std::cerr << "ÊÐÈÒÈ×ÍÀ ÏÎÌÈËÊÀ: " << e.what() << "\n";
+        cerr << "ÊÐÈÒÈ×ÍÀ ÏÎÌÈËÊÀ: " << e.what() << "\n";
         return 1;
     }
     catch (...)
     {
-        std::cerr << "Âèíèêëà íåâ³äîìà êðèòè÷íà ïîìèëêà.\n";
+        cerr << "Âèíèêëà íåâ³äîìà êðèòè÷íà ïîìèëêà.\n";
         return 2;
     }
 
