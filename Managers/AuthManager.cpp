@@ -20,7 +20,7 @@ AuthManager::AuthManager(const string& usersFilePath)
 {
     try
     {
-        this->LoadUsers();
+        this->loadUsers();
     }
     catch (const exception& e)
     {
@@ -110,7 +110,7 @@ bool AuthManager::CreateUser(
 
     try
     {
-        this->SaveUsers();
+        this->saveUsers();
         cout << "Користувача '" << username << "' успішно створено.\n";
         return true;
     }
@@ -147,7 +147,7 @@ bool AuthManager::DeleteUser(const string& username)
 
     try
     {
-        this->SaveUsers();
+        this->saveUsers();
         cout << "Користувача '" << username << "' успішно видалено.\n";
         return true;
     }
@@ -176,7 +176,7 @@ void AuthManager::ListUsers() const
     }
 }
 
-void AuthManager::LoadUsers()
+void AuthManager::loadUsers()
 {
     ifstream file(this->usersFilePath);
     if (!file.is_open())
@@ -186,7 +186,7 @@ void AuthManager::LoadUsers()
         this->users[ADMIN_USERNAME] =
             make_unique<AdminUser>(ADMIN_USERNAME, ADMIN_DEFAULT_PASS);
 
-        this->SaveUsers();
+        this->saveUsers();
         return;
     }
 
@@ -232,14 +232,14 @@ void AuthManager::LoadUsers()
         cout << "Адміністратора не знайдено. Додавання адміністратора за замовчуванням...\n";
         this->users[ADMIN_USERNAME] =
             make_unique<AdminUser>(ADMIN_USERNAME, ADMIN_DEFAULT_PASS);
-        this->SaveUsers();
+        this->saveUsers();
     }
 
     file.close();
     cout << "Успішно завантажено " << this->users.size() << " користувачів.\n";
 }
 
-void AuthManager::SaveUsers() const
+void AuthManager::saveUsers() const
 {
     ofstream file(this->usersFilePath);
     if (!file.is_open())

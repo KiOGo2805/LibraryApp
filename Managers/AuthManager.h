@@ -96,10 +96,10 @@ private:
     /**
      * @brief Завантажує базу користувачів з файлу.
      */
-    void LoadUsers();
+    void loadUsers();
 
     /**
      * @brief Зберігає поточну базу користувачів у файл.
      */
-    void SaveUsers() const;
+    void saveUsers() const;
 };

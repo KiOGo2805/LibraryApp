@@ -1,2 +1,3 @@
 Admin:admin:admin123
+User:dimasik:123
 User:stepan:12345
